@@ -1,161 +1,299 @@
 <template>
   <div id="app">
     <b-container>
-      <div class="current">
-        <h1>Moscow</h1>
-        <hr>
-        <b-row>
-          <b-col>
-            <component :key="index" :is="svg" width="100%"/>
-          </b-col>
-          <b-col>
-            <div class="time">21:43</div>
+      <b-row>
+        <b-col cols="4">
+          <div class="today">
+            <h2>{{date.toLocaleString('en-US', { weekday: 'long' })}}</h2>
             <hr>
-            <b-row>
-              <b-col cols="4">
-                <div class="now">+3°</div>
-              </b-col>
+            <b-row class="today_time">
               <b-col >
-                <div class="number">
-                  Feels like: +3°
-                  <br>
-                  Humidity: 51%
-                  <br>
-                  Wind: 9 km/h
-                </div>
+                {{date.toLocaleDateString()}}
+              </b-col>
+              <b-col cols="4">
+                {{date.toLocaleTimeString().slice(0,-3)}}
               </b-col>
             </b-row>
-          </b-col>
-        </b-row>
-        <hr>
-        <div class="flex-container" >
-          <div class="day" v-for="(day, index) in Weather" :key="index">
-            <div class="dayOfTheWeek">{{day.dayOfTheWeek}}</div>
-            <div class="number">{{day.number}} oct</div>
-            <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>
-            <div class="degrees">
-              d: {{day.day}}°
-              <br>
-              n: {{day.night}}°
+            <hr>
+            <component  :is="svg" width="90%"/>
+            <div class="now">
+                <div class="temp">+3°</div>
+              <div>Moscow</div>
             </div>
-
+            <hr>
+            <div class="number">
+               Feels like: +3°
+               <br>
+               Humidity: 51%
+               <br>
+               Wind: 9 km/h
+               </div>
           </div>
-        </div>
-      </div>
+        </b-col>
+        <b-col>
+          <div class="flex-container" >
+            <div class="day" v-for="(day, index) in Weather" :key="index">
+              <b-row>
+                <b-col>
+                  <h2>{{getDayOfTheWeek(index+1)}}</h2>
+                </b-col>
+                <b-col>
+                  <div class="today_time" >{{getDate(index+1)}}</div>
+                </b-col>
+              </b-row>
+              <hr/>
+              <b-row>
+                <b-col>
+                  <component :key="index" :is="day.svg" width="105%" class="svgDayOfTheWeek"/>
+                </b-col>
+                <b-col cols="5">
+                  <div class="darkLight">
+                    <div class="dark">
+                      {{day.day}}°
+                    </div>
+                    <div class="light">
+                      {{day.night}}°
+                    </div>
+                  </div>
+                </b-col>
+              </b-row>
+
+            </div>
+          </div>
+        </b-col>
+      </b-row>
+<!--      <div class="flex-container">-->
+<!--        <div class="svg" v-for="(day, index) in Svgs" :key="index">-->
+<!--          <component :key="index" :is="day.svg" width="145%" class="svgDayOfTheWeek"/>-->
+<!--        </div>-->
+<!--      </div>-->
     </b-container>
   </div>
 </template>
 
 <script>
   import sunny from "./components/icons/sunny";
+  import partlyCloudy from "@/components/icons/partlyCloudy";
+  import partlyRainingAndSnowing from "@/components/icons/partlyRainingAndSnowing";
+  import partlyRaining from "@/components/icons/partlyRaining";
+  import partlySnowing from "@/components/icons/partlySnowing";
+  import drizzlingRain from "./components/icons/drizzlingRain";
   import rain from "./components/icons/rain";
-  import drizzing from "./components/icons/drizzing";
-  import sunnyRain from "@/components/icons/sunnyRain";
   import cloudy from "@/components/icons/cloudy";
-
+  import drizzlingSnow from "@/components/icons/drizzlingSnow";
+  import snowy from "@/components/icons/snowy";
+  import drizzlingRainAndSnow from "@/components/icons/drizzlingRainAndSnow";
+  import rainAndSnow from "@/components/icons/rainAndSnow";
+  import storm from "@/components/icons/storm";
 export default {
   name: 'App',
   components: {},
   data(){
     return{
-      svg:sunnyRain,
+      svg:partlyRaining,
+      date:new Date(),
+      Svgs:[
+        {
+          name:'sunny',
+          svg:sunny,
+          desk:'Солнечно'
+        },
+        {
+          name:'partly cloudy',
+          svg: partlyCloudy,
+          desk:'Переменная облачность'
+        },
+        {
+          name:'partly raining and snowing',
+          svg: partlyRainingAndSnowing,
+          desk:'Переменный дождь и снег'
+        },
+        {
+          name:'partly raining',
+          svg: partlyRaining,
+          desk:'Переменный дождь'
+        },
+        {
+          name:'partly snowing',
+          svg: partlySnowing,
+          desk:'Переменный снег'
+        },
+        {
+          name:'drizzling rain',
+          svg:drizzlingRain,
+          desk:'Моросящий дождь'
+        },
+        {
+          name:'rain',
+          svg:rain,
+          desk:'Дождь'
+        },
+        {
+          name:'cloudy',
+          svg:cloudy,
+          desk:'Облачно'
+        },
+        {
+          name:'drizzling snow',
+          svg:drizzlingSnow,
+          desk:'Моросящий снег'
+        },
+        {
+          name:'snowy',
+          svg:snowy,
+          desk:'Снежно'
+        },
+        {
+          name:'drizzling rain and snow',
+          svg:drizzlingRainAndSnow,
+          desk:'Моросящий дождь и снег'
+        },
+        {
+          name:'rain and snow',
+          svg:rainAndSnow,
+          desk:'Дождь и снег'
+        },
+        {
+          name:'storm',
+          svg:storm,
+          desk:'Гроза'
+        },
+      ],
       Weather:[
         {
-          dayOfTheWeek:'Mon',
-          number:'23',
+          name:'rain',
           svg:rain,
           day:'+7',
           night:'+4'
         },
         {
-          dayOfTheWeek:'Tue',
-          number:'24',
-          svg:drizzing,
+          name:'drizzling',
+          svg:drizzlingRain,
           day:'+4',
           night:'+1'
         },
         {
-          dayOfTheWeek:'Wed',
-          number:'25',
+          name:'cloudy',
           svg:cloudy,
           day:'+2',
-          night:'+0'
+          night:'0'
         },
         {
-          dayOfTheWeek:'Thu',
-          number:'26',
+          name:'rain',
           svg:rain,
           day:'+2',
           night:'0'
         },
         {
-          dayOfTheWeek:'Fri',
-          number:'27',
+          name:'rain',
           svg:rain,
           day:'+2',
           night:'0'
         },
         {
-          dayOfTheWeek:'Sat',
-          number:'28',
+          name:'rain',
           svg:rain,
           day:'+2',
           night:'0'
         },
-        {
-          dayOfTheWeek:'Sun',
-          number:'29',
-          svg:rain,
-          day:'+5',
-          night:'+2'
-        }
       ]
+    }
+  },
+  methods:{
+    getDayMs(i){
+      let date = new Date();
+      return date.setDate(date.getDate() + i);
+    },
+    getDate(i){
+      let day = this.getDayMs(i);
+      return new Date(day).toLocaleDateString();
+    },
+    getDayOfTheWeek(i){
+      let day = this.getDayMs(i);
+      return new Date(day).toLocaleString('en-US', { weekday: 'long' });
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+  .today{
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+  }
+  .today_time{
+    color: black;
+    text-align: left;
+    font-size: 1.3rem;
+  }
 #app {
-  background: linear-gradient(178.6deg, rgb(20, 36, 50) 11.8%, rgb(91, 107, 121) 83.8%);
-  height: 100vh;
+  //background: linear-gradient(178.6deg, rgb(20, 36, 50) 11.8%, rgb(91, 107, 121) 83.8%);
+  background: linear-gradient(179.1deg, rgb(203 180 180) -1.9%, rgb(187 153 152) 44.9%, rgb(127 147 184) 96.1%);
+  min-height: 100vh;
   text-align: center;
   color: white;
   padding: 50px 0;
   font-family: 'Roboto Condensed', sans-serif;
-
 }
 hr{
-  background: rgba(255, 255, 255, 0.75);
+  //background: black;
   margin-top: .5rem !important;
   margin-bottom: .5rem !important;
+  background: transparent;
+  box-shadow: 0px .5px .5px rgba(0, 0, 0, 0.25);
 }
+  h2{
+    text-align: left;
+    color: black;
+    font-weight: 500 !important;
+  }
+
 .time{
   font-size: 3.2rem;
 }
 .now{
-  font-size: 5.5rem;
-  margin-left: 60px;
+  font-size: 2.5rem;
+  color: black;
   text-align: center;
 }
+.temp{
+  font-size: 3.5rem;
+  line-height: 3.5rem;
+}
 .svgDayOfTheWeek{
-  margin-top: 10px;
+  margin-left: -10px;
 }
 .dayOfTheWeek{
   font-size: 2rem;
   text-align: center;
 }
 .number{
-  font-size: 1.6rem;
+  font-size: 1.3rem;
+  text-align: left;
+  color: black;
+}
+.light, .dark{
+  width: 45px;
+  height: 45px;
+  background: #f1fbff;
+  padding: 5px;
+  font-size: 1.8rem;
   text-align: center;
+  border-radius: 10px;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+}
+.dark{
+  margin-left: 20px;
+}
+.light{
+  margin-top: -5px;
 }
 .degrees{
   margin-top: 10px;
   font-size: 2rem;
   text-align: left;
-}
-.current, .day{
-
 }
   .current{
     background: rgba(248, 248, 248, 0.25);
@@ -166,14 +304,30 @@ hr{
     margin-bottom: 40px;
   }
   .day{
-    border-right: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    color: black;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    padding: 12px 12px 6px;
+    h2{
+      font-size: 1.3rem !important;
+      font-weight: 500;
+      margin-bottom: 0 !important;
+    }
+    .today_time{
+      font-size: 1rem
+    }
   }
   .day:last-child{
     border-right: none;
   }
   .flex-container > .day{
-    width: 12.2%;
-    margin: 2% 1% 3%;
+    width: 43%;
+    margin: 0 1% 2%;
+  }
+  .flex-container > .svg{
+    width: 15%;
+    margin: 0 1% 2%;
   }
   .flex-container{
     display: flex;
