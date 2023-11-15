@@ -217,6 +217,14 @@ export default {
 </script>
 
 <style lang="scss">
+  #app {
+    background: linear-gradient(179.1deg, rgb(203 180 180) -1.9%, rgb(187 153 152) 44.9%, rgb(127 147 184) 96.1%);
+    min-height: 100vh;
+    text-align: center;
+    color: white;
+    padding: 50px 0;
+    font-family: 'Roboto Condensed', sans-serif;
+  }
   .today{
     background: rgba(255, 255, 255, 0.85);
     border-radius: 20px;
@@ -228,80 +236,49 @@ export default {
     text-align: left;
     font-size: 1.3rem;
   }
-#app {
-  //background: linear-gradient(178.6deg, rgb(20, 36, 50) 11.8%, rgb(91, 107, 121) 83.8%);
-  background: linear-gradient(179.1deg, rgb(203 180 180) -1.9%, rgb(187 153 152) 44.9%, rgb(127 147 184) 96.1%);
-  min-height: 100vh;
-  text-align: center;
-  color: white;
-  padding: 50px 0;
-  font-family: 'Roboto Condensed', sans-serif;
-}
-hr{
-  //background: black;
-  margin-top: .5rem !important;
-  margin-bottom: .5rem !important;
-  background: transparent;
-  box-shadow: 0px .5px .5px rgba(0, 0, 0, 0.25);
-}
+  hr{
+    margin-top: .5rem !important;
+    margin-bottom: .5rem !important;
+    background: transparent;
+    box-shadow: 0px .5px .5px rgba(0, 0, 0, 0.25);
+  }
   h2{
     text-align: left;
     color: black;
     font-weight: 500 !important;
   }
-
-.time{
-  font-size: 3.2rem;
-}
-.now{
-  font-size: 2.5rem;
-  color: black;
-  text-align: center;
-}
-.temp{
-  font-size: 3.5rem;
-  line-height: 3.5rem;
-}
-.svgDayOfTheWeek{
-  margin-left: -10px;
-}
-.dayOfTheWeek{
-  font-size: 2rem;
-  text-align: center;
-}
-.number{
-  font-size: 1.3rem;
-  text-align: left;
-  color: black;
-}
-.light, .dark{
-  width: 45px;
-  height: 45px;
-  background: #f1fbff;
-  padding: 5px;
-  font-size: 1.8rem;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
-}
-.dark{
-  margin-left: 20px;
-}
-.light{
-  margin-top: -5px;
-}
-.degrees{
-  margin-top: 10px;
-  font-size: 2rem;
-  text-align: left;
-}
-  .current{
-    background: rgba(248, 248, 248, 0.25);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    border: 1px solid rgba(43, 43, 43, 0.568);
-    padding: 15px;
-    margin-bottom: 40px;
+  .now{
+    font-size: 2.5rem;
+    color: black;
+    text-align: center;
+  }
+  .temp{
+    font-size: 3.5rem;
+    line-height: 3.5rem;
+  }
+  .svgDayOfTheWeek{
+    margin-left: -10px;
+  }
+  .number{
+    font-size: 1.3rem;
+    text-align: left;
+    color: black;
+  }
+  .light, .dark{
+    width: 45px;
+    height: 45px;
+    background: #f1fbff;
+    padding: 5px;
+    font-size: 1.8rem;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+  }
+  .dark{
+    margin-left: 20px;
+  }
+  .light{
+    margin-top: -5px;
   }
   .day{
     background: rgba(255, 255, 255, 0.85);
@@ -317,9 +294,6 @@ hr{
     .today_time{
       font-size: 1rem
     }
-  }
-  .day:last-child{
-    border-right: none;
   }
   .flex-container > .day{
     width: 43%;
