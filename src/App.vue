@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <b-container>
+      <h1>Weather Forecast</h1>
       <b-row>
         <b-col cols="4">
           <div class="today">
@@ -15,7 +16,7 @@
               </b-col>
             </b-row>
             <hr>
-            <component  :is="svg" width="90%"/>
+            <component  :is="svg" width="95%"/>
             <div class="now">
                 <div class="temp">+3°</div>
               <div>Moscow</div>
@@ -57,21 +58,17 @@
                   </div>
                 </b-col>
               </b-row>
-
             </div>
           </div>
         </b-col>
       </b-row>
-<!--      <div class="flex-container">-->
-<!--        <div class="svg" v-for="(day, index) in Svgs" :key="index">-->
-<!--          <component :key="index" :is="day.svg" width="145%" class="svgDayOfTheWeek"/>-->
-<!--        </div>-->
-<!--      </div>-->
     </b-container>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
+
   import sunny from "./components/icons/sunny";
   import partlyCloudy from "@/components/icons/partlyCloudy";
   import partlyRainingAndSnowing from "@/components/icons/partlyRainingAndSnowing";
@@ -196,10 +193,26 @@ export default {
           day:'+2',
           night:'0'
         },
-      ]
+      ],
+
     }
   },
   methods:{
+    async getWeather(){
+      const API_KEY = "fcdf7a43f2dc4f7e800180856230711"
+      let q = 'Moscow';
+      let days = '6'
+      let response = await axios.get(`http://api.weatherapi.com/v1/forecast.json`,
+              {
+                params: {
+                  key:API_KEY,
+                  q,
+                  days
+                }
+              })
+
+      console.log('response', response)
+    },
     getDayMs(i){
       let date = new Date();
       return date.setDate(date.getDate() + i);
@@ -212,24 +225,31 @@ export default {
       let day = this.getDayMs(i);
       return new Date(day).toLocaleString('en-US', { weekday: 'long' });
     }
+  },
+  async created() {
+    await this.getWeather()
   }
 }
 </script>
 
 <style lang="scss">
+  h1{
+    margin-bottom: 1rem !important;
+    text-shadow: 1.5px 1.5px 1.5px #f3e0e0;
+  }
   #app {
     background: linear-gradient(179.1deg, rgb(203 180 180) -1.9%, rgb(187 153 152) 44.9%, rgb(127 147 184) 96.1%);
     min-height: 100vh;
     text-align: center;
-    color: white;
-    padding: 50px 0;
+    padding: 45px 0;
     font-family: 'Roboto Condensed', sans-serif;
   }
   .today{
     background: rgba(255, 255, 255, 0.85);
     border-radius: 20px;
     padding: 15px;
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    height: 75vh;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   }
   .today_time{
     color: black;
@@ -240,7 +260,7 @@ export default {
     margin-top: .5rem !important;
     margin-bottom: .5rem !important;
     background: transparent;
-    box-shadow: 0px .5px .5px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 .5px .5px rgba(0, 0, 0, 0.25);
   }
   h2{
     text-align: left;
@@ -272,7 +292,7 @@ export default {
     font-size: 1.8rem;
     text-align: center;
     border-radius: 10px;
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   }
   .dark{
     margin-left: 20px;
@@ -284,7 +304,7 @@ export default {
     background: rgba(255, 255, 255, 0.85);
     border-radius: 20px;
     color: black;
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
     padding: 12px 12px 6px;
     h2{
       font-size: 1.3rem !important;
@@ -297,14 +317,43 @@ export default {
   }
   .flex-container > .day{
     width: 43%;
-    margin: 0 1% 2%;
-  }
-  .flex-container > .svg{
-    width: 15%;
+    height: 23.6vh;
     margin: 0 1% 2%;
   }
   .flex-container{
     display: flex;
     flex-wrap: wrap;
+  }
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    .today{
+      height: 65vh;
+    }
+    .flex-container > .day {
+      width: 48%;
+      height: 20.8vh;
+    }
+    .day hr{
+      margin-bottom: 15px !important;
+    }
+    h2{
+      font-size: 1.6rem !important;
+    }
+    .today_time,.number {
+      font-size: 1.2rem;
+    }
+    .now,.temp{
+      font-size: 2rem;
+    }
+    .day h2 {
+      font-size: 1.2rem !important;
+    }
+    .light, .dark {
+      width: 35px;
+      height: 35px;
+      font-size: 1.35rem;
+    }
+    .darkLight{
+      margin-left: -20px;
+    }
   }
 </style>
