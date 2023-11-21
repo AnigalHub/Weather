@@ -2,7 +2,7 @@
     <svg version="1.1" id="Sunny" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 50 30" style="enable-background:new 0 0 50 30;" xml:space="preserve">
         <g>
-	<linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="36.6041" y1="1.3859" x2="13.12" y2="27.6287">
+	<linearGradient id="sunny" gradientUnits="userSpaceOnUse" x1="36.6041" y1="1.3859" x2="13.12" y2="27.6287">
 		<stop  offset="0" style="stop-color:#FFBA24"/>
         <stop  offset="1" style="stop-color:#FF5500"/>
 	</linearGradient>
@@ -46,7 +46,7 @@
 
 <style scoped lang="scss">
     #Sunny{
-    .st0{fill:url(#SVGID_4_);}
+    .st0{fill:url(#sunny);}
     .st1{fill:url(#SVGID_00000040576808481869897650000010916549606514652590_);}
     .st2{fill:url(#SVGID_00000069397509105119332850000004874550290680319641_);}
     .st3{opacity:0.4;fill:url(#SVGID_00000028307654717499205580000004244126258082737539_);}
