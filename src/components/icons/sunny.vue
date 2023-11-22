@@ -40,7 +40,7 @@
 
 <script>
     export default {
-        name: "partyCloud.svg"
+        name: "sunny"
     }
 </script>
 
