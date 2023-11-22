@@ -1,68 +1,69 @@
 <template>
   <div id="app">
     <b-container>
-      <h1>Weather Forecast</h1>
-      <b-row>
-        <b-col cols="4">
-          <div class="today">
-            <h2>{{date.toLocaleString('en-US', { weekday: 'long' })}}</h2>
-            <hr>
-            <b-row class="today_time">
-              <b-col >
-                {{date.toLocaleDateString()}}
-              </b-col>
-              <b-col cols="4">
-                {{date.toLocaleTimeString().slice(0,-3)}}
-              </b-col>
-            </b-row>
-            <hr>
-            <component  :is="svg" width="95%"/>
-            <div class="now">
-                <div class="temp">+3°</div>
-              <div>Moscow</div>
-            </div>
-            <hr>
-            <div class="number">
-               Feels like: +3°
-               <br>
-               Humidity: 51%
-               <br>
-               Wind: 9 km/h
-               </div>
-          </div>
-        </b-col>
-        <b-col>
-          <div class="flex-container" >
-            <div class="day" v-for="(day, index) in Weather" :key="index">
-              <b-row>
-                <b-col>
-                  <h2>{{getDayOfTheWeek(index+1)}}</h2>
+        <h1>Weather Forecast</h1>
+        <b-row>
+          <b-col cols="4">
+            <div class="today">
+              <h2>{{date.toLocaleString('en-US', { weekday: 'long' })}}</h2>
+              <hr>
+              <b-row class="today_time">
+                <b-col >
+                  {{date.toLocaleDateString()}}
                 </b-col>
-                <b-col>
-                  <div class="today_time" >{{getDate(index+1)}}</div>
+                <b-col cols="4">
+                  {{date.toLocaleTimeString().slice(0,-3)}}
                 </b-col>
               </b-row>
-              <hr/>
-              <b-row>
-                <b-col>
-                  <component :key="index" :is="day.svg" width="105%" class="svgDayOfTheWeek"/>
-                </b-col>
-                <b-col cols="5">
-                  <div class="darkLight">
-                    <div class="dark">
-                      {{day.day}}°
-                    </div>
-                    <div class="light">
-                      {{day.night}}°
-                    </div>
-                  </div>
-                </b-col>
-              </b-row>
+              <hr>
+              <component  :is="Weather.current.svg" width="95%"/>
+              <div class="now">
+                <div class="temp">{{Math.round(Weather.current.temp)}}°</div>
+                <div>{{Weather.city}}</div>
+              </div>
+              <hr>
+              <div class="number">
+                Feels like: {{Math.round(Weather.current.feel)}}°
+                <br>
+                Humidity: {{Weather.current.humidity}}%
+                <br>
+                Wind: {{Weather.current.wind}} km/h
+              </div>
             </div>
-          </div>
-        </b-col>
-      </b-row>
-    </b-container>
+          </b-col>
+          <b-col>
+            <div class="flex-container" >
+              <div class="day" v-for="(day, index) in Weather.days" :key="index">
+                <b-row>
+                  <b-col>
+                    <h2>{{getDayOfTheWeek(index+1)}}</h2>
+                  </b-col>
+                  <b-col>
+                    <div class="today_time" >{{getDate(index+1)}}</div>
+                  </b-col>
+                </b-row>
+                <hr/>
+                <b-row>
+                  <b-col>
+                    <component :key="index" :is="day.svg" width="105%" class="svgDayOfTheWeek"/>
+                  </b-col>
+                  <b-col cols="5">
+                    <div class="darkLight">
+                      <div class="dark">
+                        {{Math.round(day.maxTemp)}}°
+                      </div>
+                      <div class="light">
+                        {{Math.round(day.minTemp)}}°
+                      </div>
+                    </div>
+                  </b-col>
+                </b-row>
+               <b>{{day.name}}</b>
+              </div>
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
   </div>
 </template>
 
@@ -82,126 +83,193 @@
   import drizzlingRainAndSnow from "@/components/icons/drizzlingRainAndSnow";
   import rainAndSnow from "@/components/icons/rainAndSnow";
   import storm from "@/components/icons/storm";
+  import sunnyStorm from "@/components/icons/sunnyStorm";
+  import snowStorm from "@/components/icons/snowStorm";
+  import sunnySnowStorm from "@/components/icons/sunnySnowStorm";
+  import overcast from "@/components/icons/overcast";
+
 export default {
   name: 'App',
   components: {},
   data(){
     return{
       svg:partlyRaining,
+      Weather:{
+        city:'',
+        current:{
+          temp:'',
+          wind:'',
+          feel:'',
+          humidity:'',
+          svg:{},
+        },
+        days:[]
+      },
       date:new Date(),
       Svgs:[
         {
+          code:'1',
           name:'sunny',
           svg:sunny,
           desk:'Солнечно'
         },
         {
+          code:'2',
           name:'partly cloudy',
           svg: partlyCloudy,
           desk:'Переменная облачность'
         },
         {
-          name:'partly raining and snowing',
+          code:'3',
+          name:'variable rain and snow',
           svg: partlyRainingAndSnowing,
           desk:'Переменный дождь и снег'
         },
         {
-          name:'partly raining',
+          code:'4',
+          name:'variable rain',
           svg: partlyRaining,
           desk:'Переменный дождь'
         },
         {
-          name:'partly snowing',
+          code:'5',
+          name:'variable snow',
           svg: partlySnowing,
           desk:'Переменный снег'
         },
         {
+          code:'6',
           name:'drizzling rain',
           svg:drizzlingRain,
           desk:'Моросящий дождь'
         },
         {
+          code:'7',
           name:'rain',
           svg:rain,
           desk:'Дождь'
         },
         {
+          code:'8',
           name:'cloudy',
           svg:cloudy,
           desk:'Облачно'
         },
         {
+          code:'9',
           name:'drizzling snow',
           svg:drizzlingSnow,
           desk:'Моросящий снег'
         },
         {
+          code:'10',
           name:'snowy',
           svg:snowy,
           desk:'Снежно'
         },
         {
+          code:'11',
           name:'drizzling rain and snow',
           svg:drizzlingRainAndSnow,
           desk:'Моросящий дождь и снег'
         },
         {
+          code:'12',
           name:'rain and snow',
           svg:rainAndSnow,
           desk:'Дождь и снег'
         },
         {
+          code:'13',
           name:'storm',
           svg:storm,
           desk:'Гроза'
         },
-      ],
-      Weather:[
         {
-          name:'rain',
-          svg:rain,
-          day:'+7',
-          night:'+4'
+          code:'14',
+          name:'sunnyStorm',
+          svg:sunnyStorm,
+          desk:'Гроза и солнце'
         },
         {
-          name:'drizzling',
-          svg:drizzlingRain,
-          day:'+4',
-          night:'+1'
+          code:'15',
+          name:'snowStorm',
+          svg:snowStorm,
+          desk:'Гроза и снег'
         },
         {
-          name:'cloudy',
-          svg:cloudy,
-          day:'+2',
-          night:'0'
+          code:'16',
+          name:'sunnySnowStorm',
+          svg:sunnySnowStorm,
+          desk:'Гроза, солнце и снег'
         },
         {
-          name:'rain',
-          svg:rain,
-          day:'+2',
-          night:'0'
-        },
-        {
-          name:'rain',
-          svg:rain,
-          day:'+2',
-          night:'0'
-        },
-        {
-          name:'rain',
-          svg:rain,
-          day:'+2',
-          night:'0'
+          code:'17',
+          name:'overcast',
+          svg:overcast,
+          desk:'Пасмурно'
         },
       ],
-
+      IncomingPictures:[
+        {
+          codes:[1000]
+        },
+        {
+          codes:[1003]
+        },
+        {
+          codes:[1069,1252]
+        },
+        {
+          codes:[1063, 1192, 1243, 1246]
+        },
+        {
+          codes:[1066, 1255, 1258, 1261, 1264]
+        },
+        {
+          codes:[1150, 1153, 1180, 1183, 1186, 1189, 1240]
+        },
+        {
+          codes:[1072, 1171, 1195]
+        },
+        {
+          codes:[1006]
+        },
+        {
+          codes:[1114, 1117, 1168, 1204,1210, 1213, 1216, 1219]
+        },
+        {
+          codes:[1207, 1222, 1225]
+        },
+        {
+          codes:[1198, 1237]
+        },
+        {
+          codes:[1201, 1249]
+        },
+        {
+          codes:[1276]
+        },
+        {
+          codes:[1087, 1273]
+        },
+        {
+          codes:[1282]
+        },
+        {
+          codes:[1279]
+        },
+        {
+          codes:[1009,1030, 1135, 1147]
+        },
+      ]
     }
   },
   methods:{
     async getWeather(){
       const API_KEY = "fcdf7a43f2dc4f7e800180856230711"
       let q = 'Moscow';
-      let days = '6'
+      let days = '7'
       let response = await axios.get(`http://api.weatherapi.com/v1/forecast.json`,
               {
                 params: {
@@ -209,9 +277,8 @@ export default {
                   q,
                   days
                 }
-              })
-
-      console.log('response', response)
+              });
+      return response;
     },
     getDayMs(i){
       let date = new Date();
@@ -224,10 +291,42 @@ export default {
     getDayOfTheWeek(i){
       let day = this.getDayMs(i);
       return new Date(day).toLocaleString('en-US', { weekday: 'long' });
+    },
+    getCurrentData(response){
+      this.Weather.city = response.data.location.name;
+      this.Weather.current.temp = response.data.current.temp_c;
+      this.Weather.current.wind = response.data.current.wind_kph;
+      this.Weather.current.feel = response.data.current.feelslike_c;
+      this.Weather.current.humidity = response.data.current.humidity;
+      this.Weather.current.svg = this.putInSvg(response.data.current.condition.code)[0]
+    },
+    putInSvg(Code){
+      for(const i in this.IncomingPictures) {
+        for(const code of this.IncomingPictures[i].codes) {
+          if(code === Code){
+            return [this.Svgs[i].svg, this.Svgs[i].name ];
+          }
+        }
+      }
+    },
+    getWeekData(response){
+      for(let jj=1; jj < response.data.forecast.forecastday.length; jj++){
+        let day = {};
+        day.maxTemp = response.data.forecast.forecastday[jj].day.maxtemp_c;
+        day.minTemp = response.data.forecast.forecastday[jj].day.mintemp_c;
+        let code = response.data.forecast.forecastday[jj].day.condition.code;
+        day.svg = this.putInSvg(code)[0];
+        day.name = this.putInSvg(code)[1];
+        console.log('code', code)
+        this.Weather.days.push(day);
+      }
     }
   },
   async created() {
-    await this.getWeather()
+    let response  = await this.getWeather()
+    console.log('created', response);
+    this.getCurrentData(response);
+    this.getWeekData(response)
   }
 }
 </script>
@@ -285,7 +384,7 @@ export default {
     color: black;
   }
   .light, .dark{
-    width: 45px;
+    width: 52px;
     height: 45px;
     background: #f1fbff;
     padding: 5px;
@@ -348,8 +447,8 @@ export default {
       font-size: 1.2rem !important;
     }
     .light, .dark {
-      width: 35px;
-      height: 35px;
+      width: 42px;
+      height: 38px;
       font-size: 1.35rem;
     }
     .darkLight{
