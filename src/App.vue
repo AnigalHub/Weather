@@ -108,103 +108,85 @@ export default {
       date:new Date(),
       Svgs:[
         {
-          code:'1',
           name:'sunny',
           svg:sunny,
           desk:'Солнечно'
         },
         {
-          code:'2',
           name:'partly cloudy',
           svg: partlyCloudy,
           desk:'Переменная облачность'
         },
         {
-          code:'3',
           name:'variable rain and snow',
           svg: partlyRainingAndSnowing,
           desk:'Переменный дождь и снег'
         },
         {
-          code:'4',
           name:'variable rain',
           svg: partlyRaining,
           desk:'Переменный дождь'
         },
         {
-          code:'5',
           name:'variable snow',
           svg: partlySnowing,
           desk:'Переменный снег'
         },
         {
-          code:'6',
           name:'drizzling rain',
           svg:drizzlingRain,
           desk:'Моросящий дождь'
         },
         {
-          code:'7',
-          name:'rain',
           svg:rain,
           desk:'Дождь'
         },
         {
-          code:'8',
           name:'cloudy',
           svg:cloudy,
           desk:'Облачно'
         },
         {
-          code:'9',
           name:'drizzling snow',
           svg:drizzlingSnow,
           desk:'Моросящий снег'
         },
         {
-          code:'10',
           name:'snowy',
           svg:snowy,
           desk:'Снежно'
         },
         {
-          code:'11',
           name:'drizzling rain and snow',
           svg:drizzlingRainAndSnow,
           desk:'Моросящий дождь и снег'
         },
         {
-          code:'12',
           name:'rain and snow',
           svg:rainAndSnow,
           desk:'Дождь и снег'
         },
         {
-          code:'13',
           name:'storm',
           svg:storm,
           desk:'Гроза'
         },
         {
-          code:'14',
           name:'sunnyStorm',
           svg:sunnyStorm,
           desk:'Гроза и солнце'
         },
         {
-          code:'15',
           name:'snowStorm',
           svg:snowStorm,
           desk:'Гроза и снег'
         },
         {
-          code:'16',
           name:'sunnySnowStorm',
           svg:sunnySnowStorm,
           desk:'Гроза, солнце и снег'
         },
         {
-          code:'17',
           name:'overcast',
           svg:overcast,
           desk:'Пасмурно'
@@ -292,41 +274,42 @@ export default {
       let day = this.getDayMs(i);
       return new Date(day).toLocaleString('en-US', { weekday: 'long' });
     },
-    getCurrentData(response){
-      this.Weather.city = response.data.location.name;
-      this.Weather.current.temp = response.data.current.temp_c;
-      this.Weather.current.wind = response.data.current.wind_kph;
-      this.Weather.current.feel = response.data.current.feelslike_c;
-      this.Weather.current.humidity = response.data.current.humidity;
-      this.Weather.current.svg = this.putInSvg(response.data.current.condition.code)[0]
+    getCurrentData(data){
+      let current =  data.current;
+      this.Weather.city = data.location.name;
+      this.Weather.current.temp = current.temp_c;
+      this.Weather.current.wind = current.wind_kph;
+      this.Weather.current.feel = current.feelslike_c;
+      this.Weather.current.humidity = current.humidity;
+      this.Weather.current.svg = this.putInSvg(current.condition.code)[0]
     },
-    putInSvg(Code){
+    putInSvg(codePicture){
       for(const i in this.IncomingPictures) {
         for(const code of this.IncomingPictures[i].codes) {
-          if(code === Code){
+          if(code === codePicture){
             return [this.Svgs[i].svg, this.Svgs[i].name ];
           }
         }
       }
     },
-    getWeekData(response){
-      for(let jj=1; jj < response.data.forecast.forecastday.length; jj++){
+    getWeekData(data){
+      let forecast = data.forecast;
+      for(let jj=1; jj < forecast.forecastday.length; jj++){
         let day = {};
-        day.maxTemp = response.data.forecast.forecastday[jj].day.maxtemp_c;
-        day.minTemp = response.data.forecast.forecastday[jj].day.mintemp_c;
-        let code = response.data.forecast.forecastday[jj].day.condition.code;
+        day.maxTemp = forecast.forecastday[jj].day.maxtemp_c;
+        day.minTemp = forecast.forecastday[jj].day.mintemp_c;
+        let code = forecast.forecastday[jj].day.condition.code;
         day.svg = this.putInSvg(code)[0];
         day.name = this.putInSvg(code)[1];
-        console.log('code', code)
         this.Weather.days.push(day);
       }
     }
   },
   async created() {
     let response  = await this.getWeather()
-    console.log('created', response);
-    this.getCurrentData(response);
-    this.getWeekData(response)
+    console.log('created', response.data);
+    this.getCurrentData(response.data);
+    this.getWeekData(response.data)
   }
 }
 </script>
@@ -337,15 +320,17 @@ export default {
     text-shadow: 1.5px 1.5px 1.5px #f3e0e0;
   }
   #app {
-    background: linear-gradient(179.1deg, rgb(203 180 180) -1.9%, rgb(187 153 152) 44.9%, rgb(127 147 184) 96.1%);
+    //background: linear-gradient(179.1deg, rgb(203 180 180) -1.9%, rgb(187 153 152) 44.9%, rgb(127 147 184) 96.1%);
+    //background: linear-gradient(179.1deg, #fff -1.9%, #D5F3FF 44.9%, #85BCF1 96.1%);
+    background: linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%);
     min-height: 100vh;
     text-align: center;
     padding: 45px 0;
     font-family: 'Roboto Condensed', sans-serif;
   }
   .today{
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 20px;
+    background: rgb(255 253 253 / 36%);
+    border-radius: 10px;
     padding: 15px;
     height: 75vh;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
@@ -400,8 +385,8 @@ export default {
     margin-top: -5px;
   }
   .day{
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 20px;
+    background: rgb(255 253 253 / 36%);
+    border-radius: 10px;
     color: black;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
     padding: 12px 12px 6px;
