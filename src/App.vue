@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <b-container>
+  <div id="app" :style="{background:Weather.current.background}">
+    <b-container >
         <h1>Weather Forecast</h1>
         <b-row>
           <b-col cols="4">
@@ -39,7 +39,7 @@
                     <h2>{{getDayOfTheWeek(index+1)}}</h2>
                   </b-col>
                   <b-col>
-                    <div class="today_time" >{{getDate(index+1)}}</div>
+                    <div class="today_time" >{{day.number}}</div>
                   </b-col>
                 </b-row>
                 <hr/>
@@ -63,6 +63,7 @@
             </div>
           </b-col>
         </b-row>
+      <WeatherChart :chartOptions="chartOptions" :chartData="chartData" :type="type"/>
       </b-container>
   </div>
 </template>
@@ -87,12 +88,21 @@
   import snowStorm from "@/components/icons/snowStorm";
   import sunnySnowStorm from "@/components/icons/sunnySnowStorm";
   import overcast from "@/components/icons/overcast";
+  import WeatherChart from "@/components/WeatherChart"
 
 export default {
   name: 'App',
-  components: {},
+  components: {WeatherChart},
   data(){
     return{
+      chartData: {
+        labels: [],
+        datasets: [ { label: 'Mounths', data: [] } ]
+      },
+      chartOptions: {
+        responsive: true,
+      },
+      type: "Line",
       svg:partlyRaining,
       Weather:{
         city:'',
@@ -110,86 +120,104 @@ export default {
         {
           name:'sunny',
           svg:sunny,
-          desk:'Солнечно'
+          desk:'Солнечно',
+          background:'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, #fff3d0 44.9%, #eaf7fc 96.1%)',
         },
         {
           name:'partly cloudy',
           svg: partlyCloudy,
-          desk:'Переменная облачность'
+          desk:'Переменная облачность',
+          background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, rgb(200, 223, 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
           name:'variable rain and snow',
           svg: partlyRainingAndSnowing,
-          desk:'Переменный дождь и снег'
+          desk:'Переменный дождь и снег',
+          background: 'linear-gradient(179.1deg, #add2f5 -1.9%, #D5F3FF 44.9%, #ffe971 96.1%)'
         },
         {
           name:'variable rain',
           svg: partlyRaining,
-          desk:'Переменный дождь'
+          desk:'Переменный дождь',
+          background: 'linear-gradient(179.1deg, rgb(254, 213, 102) -1.9%, rgb(200 223 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
           name:'variable snow',
           svg: partlySnowing,
-          desk:'Переменный снег'
+          desk:'Переменный снег',
+          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #f3ece3 96.1%)'
         },
         {
           name:'drizzling rain',
           svg:drizzlingRain,
-          desk:'Моросящий дождь'
+          desk:'Моросящий дождь',
+          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
         },
         {
+          name:'rain',
           svg:rain,
-          desk:'Дождь'
+          desk:'Дождь',
+          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
         },
         {
           name:'cloudy',
           svg:cloudy,
-          desk:'Облачно'
+          desk:'Облачно',
+          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #bedfec 44.9%, #eaf7fc 96.1%)'
         },
         {
           name:'drizzling snow',
           svg:drizzlingSnow,
-          desk:'Моросящий снег'
+          desk:'Моросящий снег',
+          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
           name:'snowy',
           svg:snowy,
-          desk:'Снежно'
+          desk:'Снежно',
+          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
           name:'drizzling rain and snow',
           svg:drizzlingRainAndSnow,
-          desk:'Моросящий дождь и снег'
+          desk:'Моросящий дождь и снег',
+          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
           name:'rain and snow',
           svg:rainAndSnow,
-          desk:'Дождь и снег'
+          desk:'Дождь и снег',
+          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
           name:'storm',
           svg:storm,
-          desk:'Гроза'
+          desk:'Гроза',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
           name:'sunnyStorm',
           svg:sunnyStorm,
-          desk:'Гроза и солнце'
+          desk:'Гроза и солнце',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #dedbd1 96.1%)'
         },
         {
           name:'snowStorm',
           svg:snowStorm,
-          desk:'Гроза и снег'
+          desk:'Гроза и снег',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
           name:'sunnySnowStorm',
           svg:sunnySnowStorm,
-          desk:'Гроза, солнце и снег'
+          desk:'Гроза, солнце и снег',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
           name:'overcast',
           svg:overcast,
-          desk:'Пасмурно'
+          desk:'Пасмурно',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
       ],
       IncomingPictures:[
@@ -281,13 +309,15 @@ export default {
       this.Weather.current.wind = current.wind_kph;
       this.Weather.current.feel = current.feelslike_c;
       this.Weather.current.humidity = current.humidity;
-      this.Weather.current.svg = this.putInSvg(current.condition.code)[0]
+      this.Weather.current.svg = this.putInSvg(current.condition.code)[0];
+      console.log("Weather.current.svg", this.Weather.current.svg)
+      this.Weather.current.background = this.putInSvg(current.condition.code)[2];
     },
     putInSvg(codePicture){
       for(const i in this.IncomingPictures) {
         for(const code of this.IncomingPictures[i].codes) {
           if(code === codePicture){
-            return [this.Svgs[i].svg, this.Svgs[i].name ];
+            return [this.Svgs[i].svg, this.Svgs[i].name, this.Svgs[i].background ];
           }
         }
       }
@@ -301,16 +331,28 @@ export default {
         let code = forecast.forecastday[jj].day.condition.code;
         day.svg = this.putInSvg(code)[0];
         day.name = this.putInSvg(code)[1];
+        day.number = new Date(this.getDayMs(jj)).toLocaleDateString();
+
+        this.chartData.labels.push(day.number);
+        this.chartData.datasets[0].data.push(Math.round(day.minTemp));
+        console.log('datasets', {datasets:this.chartData.datasets })
+
+        console.log('labels', {labels:this.chartData.labels })
         this.Weather.days.push(day);
+
       }
-    }
+    },
   },
   async created() {
     let response  = await this.getWeather()
+
     console.log('created', response.data);
     this.getCurrentData(response.data);
-    this.getWeekData(response.data)
-  }
+    this.getWeekData(response.data);
+    console.log('this.chartData', this.chartData)
+  },
+
+
 }
 </script>
 
