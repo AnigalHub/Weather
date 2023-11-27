@@ -1,6 +1,6 @@
 <template>
   <div id="app" :style="{background:Weather.current.background}">
-    <b-container >
+    <b-container v-if="!loading">
         <h1>Weather Forecast</h1>
         <b-row>
           <b-col cols="4">
@@ -64,6 +64,7 @@
           </b-col>
         </b-row>
       <WeatherChart :chartOptions="chartOptions" :chartData="chartData" :type="type"/>
+
       </b-container>
   </div>
 </template>
@@ -90,11 +91,13 @@
   import overcast from "@/components/icons/overcast";
   import WeatherChart from "@/components/WeatherChart"
 
+
 export default {
   name: 'App',
   components: {WeatherChart},
   data(){
     return{
+      loading: true,
       chartData: {
         labels: [],
         datasets: [ { label: 'Mounths', data: [] } ]
@@ -345,7 +348,7 @@ export default {
   },
   async created() {
     let response  = await this.getWeather()
-
+    this.loading = false;
     console.log('created', response.data);
     this.getCurrentData(response.data);
     this.getWeekData(response.data);
