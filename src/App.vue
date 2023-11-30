@@ -3,79 +3,185 @@
     <b-container v-if="!loading">
         <h1>Weather Forecast</h1>
         <b-row>
-          <b-col cols="4">
-            <div class="city">{{Weather.city}}</div>
-            <div class="today">
+          <b-col cols="3">
+<!--            <div class="city">{{Weather.city}}</div>-->
+            <h4>Today:</h4>
+            <div class="today line1">
               <b-row>
-                <b-col>
-                  <b-row>
-                    <b-col>
-                      <component  :is="Weather.current.svg" class="mainSvg"/>
-                    </b-col>
-                    <b-col>
-                      <div class="temp">{{Math.round(Weather.current.temp)}}°</div>
-                    </b-col>
-                  </b-row>
-                  <b style="margin-left: 35%">{{Weather.current.name}}</b>
+                <b-col cols="5">
+                  <component  :is="Weather.current.svg" class="mainSvg"/>
+                  <div class="temp">{{Math.round(Weather.current.temp)}}°</div>
+                  <p class="conditions"><b>{{Weather.current.name}}</b></p>
                 </b-col>
                 <b-col>
-                  <h2>{{date.toLocaleString('en-US', { weekday: 'long' })}}</h2>
-                  <div>{{date.toLocaleDateString()}}</div>
-                  <div>{{date.toLocaleTimeString().slice(0,-3)}}</div>
+                  <p class="today_time"><b>{{date.toLocaleString('en-US', { weekday: 'long' })}}</b></p>
+                  <hr/>
+                  <p class="today_time">{{date.toLocaleDateString()}}</p>
+
+                  <p class="today_time">{{date.toLocaleTimeString().slice(0,-3)}}</p>
+                  <hr/>
+                  <p class="today_time"> Feels like: <b>{{Math.round(Weather.current.feel)}}°</b> </p>
                 </b-col>
               </b-row>
             </div>
+            <h4>Detailed description:</h4>
             <div class="feels">
-              <b-row>
-                <b-col v-for="(day, index) in Weather.current.twentyFourHours" :key="index">
-                  <p><b>{{day.name}}</b></p>
-                  <component :key="index" :is="day.svg" class="twentyFourHoursSvg"/>
-                  <div class="twentyFourHoursTemp">{{day.temp}}</div>
-                  <p class="conditions"><b>{{day.svgName}}</b></p>
-                </b-col>
-              </b-row>
+              <div class="number flex-container">
+                <div>
+                  Cloudy:<b>{{Weather.current.cloudy}}%</b>
+                </div>
+                <div>
+                  Humidity: <b>{{Weather.current.humidity}}%</b>
+                </div>
+                <div>
+                  Precipitation: <b>{{Weather.current.precip_mm}} mm</b>
+                </div>
+                <div>
+                  Wind: <b>{{Weather.current.wind}} km/h</b>
+                </div>
+                <div>
+                  Visibility:<b>{{Weather.current.vis_km}} km</b>
+                </div>
+                <div>
+                  Wind direction by compass: <b>{{Weather.current.wind_dir}}</b>
+                </div>
+                <div>
+                  Wind direction in degree: <b>{{Weather.current.wind_degree}}</b>
+                </div>
+
+              </div>
             </div>
-            <div class="feels">
-              <div class="number">
-                Feels like: {{Math.round(Weather.current.feel)}}°
-                <br>
-                Cloudy: {{Weather.current.cloudy}}%
-                <br>
-                Humidity: {{Weather.current.humidity}}%
-                <br/>
-                Precipitation: {{Weather.current.precip_mm}} mm
-                <br>
-                Wind: {{Weather.current.wind}} km/h
-                <br/>
-                Wind direction: {{Weather.current.wind_dir}}
+            <div>
+              <h4>Twenty-four hours:</h4>
+              <div class="feels line1">
+                <b-row>
+                  <b-col v-for="(day, index) in Weather.current.twentyFourHours" :key="index">
+                    <p><b>{{day.name}}</b></p>
+                    <component :key="index" :is="day.svg" class="twentyFourHoursSvg"/>
+                    <div class="twentyFourHoursTemp">{{Math.round(day.temp)}}°</div>
+                    <p class="conditions"><b>{{day.svgName}}</b></p>
+                  </b-col>
+                </b-row>
               </div>
             </div>
           </b-col>
           <b-col>
             <div class="flex-container">
-              <div class="day" v-for="(day, index) in Weather.days" :key="index">
-                <b-row>
-                  <b-col>
-                    <h2>{{getDayOfTheWeek(index+1)}}</h2>
-                  </b-col>
-                  <b-col>
-                    <div class="today_time" >{{day.number}}</div>
-                  </b-col>
-                </b-row>
-                <hr/>
-                    <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>
-                    <div class="darkLight">
-                      <div class="light">
-                        {{Math.round(day.maxTemp)}}°
-                      </div>
-                      <div class="light">
-                        {{Math.round(day.minTemp)}}°
-                      </div>
+              <div>
+                <h4>The emergence of the sun and moon:</h4>
+
+<!--                  <b-row>-->
+<!--                    <b-col>-->
+<!--                      <p><b>Light:</b></p>-->
+<!--                      <component :is="Svgs[0].svg" class="sunMoonSvg"/>-->
+<!--                      <p class="conditions"><b> from {{Weather.current.sunMoon.start}} to {{Weather.current.sunMoon.end}}</b></p>-->
+<!--                      <p class="conditions"><b>{{Weather.current.sunMoon.sun_phase}}</b></p>-->
+<!--                    </b-col>-->
+<!--                    <b-col>-->
+<!--                      <p><b>Dark:</b></p>-->
+<!--                      <component :is="Svgs[0].svg" class="sunMoonSvg"/>-->
+<!--                      <p class="conditions"><b> from {{Weather.current.sunMoon.end}} to {{Weather.current.sunMoon.start}}</b></p>-->
+<!--                      <p class="conditions"><b>{{Weather.current.sunMoon.moon_phase}}</b></p>-->
+<!--                    </b-col>-->
+<!--                  </b-row>-->
+                  <div class="flex-container">
+                    <div class="day">
+                      <p class="day_name"><b>Light:</b></p>
+                      <hr/>
+                      <b-row>
+                        <b-col cols="4">
+                          <component :is="Svgs[0].svg" class="sunMoonSvg"/>
+                        </b-col>
+                        <b-col>
+                          <div class="light">
+                            <p class="conditions"><b> from {{Weather.current.sunMoon.start}} to {{Weather.current.sunMoon.end}}</b></p>
+                          </div>
+                          <p class="conditions"><b>{{Weather.current.sunMoon.sun_phase}}</b></p>
+                        </b-col>
+                      </b-row>
                     </div>
-                <p class="conditions"><b>{{day.name}}</b></p>
+                    <div class="day">
+                        <p class="day_name"><b>Dark:</b></p>
+                        <hr/>
+                        <b-row>
+                          <b-col cols="4">
+                            <component :is="Svgs[0].svg" class="sunMoonSvg"/>
+                          </b-col>
+                          <b-col>
+                            <div class="light">
+                              <p class="conditions"><b> from {{Weather.current.sunMoon.end}} to {{Weather.current.sunMoon.start}}</b></p>
+                            </div>
+                            <p class="conditions"><b>{{Weather.current.sunMoon.moon_phase}}</b></p>
+                          </b-col>
+                        </b-row>
+                      </div>
+                      <!--                    <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>-->
+                      <!--                    <div class="darkLight">-->
+                      <!--                      <div class="light">-->
+                      <!--                        {{Math.round(day.maxTemp)}}°-->
+                      <!--                      </div>-->
+                      <!--                      <div class="light">-->
+                      <!--                        {{Math.round(day.minTemp)}}°-->
+                      <!--                      </div>-->
+                      <!--                    </div>-->
+
+
+
+                </div>
+              </div>
+              <div>
+                <h4>Coming days:</h4>
+                <div class="flex-container">
+                  <div class="day" v-for="(day, index) in Weather.days" :key="index">
+                    <b-row>
+                      <b-col>
+                        <h2>{{getDayOfTheWeek(index+1)}}</h2>
+                      </b-col>
+                      <b-col>
+                        <div class="today_time" >{{day.number}}</div>
+                      </b-col>
+                    </b-row>
+                    <hr/>
+                    <b-row>
+                      <b-col cols="5">
+                        <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>
+                      </b-col>
+                      <b-col>
+                        <div class="light">
+                            {{Math.round(day.minTemp)}}°   {{Math.round(day.maxTemp)}}°
+                        </div>
+                        <p class="conditions"><b>{{day.name}}</b></p>
+                      </b-col>
+                    </b-row>
+<!--                    <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>-->
+<!--                    <div class="darkLight">-->
+<!--                      <div class="light">-->
+<!--                        {{Math.round(day.maxTemp)}}°-->
+<!--                      </div>-->
+<!--                      <div class="light">-->
+<!--                        {{Math.round(day.minTemp)}}°-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                  </div>
+                </div>
               </div>
             </div>
-            <WeatherChart :chartOptions="chartOptions" :chartData="chartData" type="Line"/>
+            <h4>Hourly forecast</h4>
+            <div class="flex-container">
+              <div>
+                <WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/>
+              </div>
+              <div>
+                <WeatherChart :chartOptions="chartOptions" :chartData="SunMoon" type="Line"/>
+              </div>
+              <div>
+                <WeatherChart :chartOptions="chartOptions" :chartData="SunMoon" type="Line"/>
+              </div>
+              <div>
+                <WeatherChart :chartOptions="chartOptions" :chartData="SunMoon" type="Line"/>
+              </div>
+            </div>
           </b-col>
         </b-row>
       </b-container>
@@ -113,7 +219,45 @@ export default {
       loading: true,
       chartData: {
         labels: [],
-        datasets: [ { label: 'Hourly forecast', data: [] } ]
+        datasets: [
+                { label: 'Hourly forecast', data: [] }
+        ]
+      },
+      tempDay: {
+        labels: [],
+        datasets: [
+          { label: 'Average temperature', data: [] }
+        ]
+      },
+      chartdata2: {
+        labels: ['Январь', 'Humidity'],
+        datasets: [
+          {
+            label: 'Данные 1',
+            backgroundColor: '#f87979',
+            data: [40, 20]
+          },
+          {
+            label: 'Данные 2',
+            backgroundColor: '#f87979',
+            data: [34, 67]
+          }
+        ]
+      },
+      SunMoon:{
+        labels: [],
+        datasets: [
+          {
+            label: 'Cloudy',
+            backgroundColor: '#f87979',
+            data: []
+          },
+          {
+            label: 'Humidity',
+            backgroundColor: '#f87979',
+            data: []
+          }
+        ]
       },
       chartOptions: {
         responsive: true,
@@ -128,6 +272,7 @@ export default {
           feel:'',
           humidity:'',
           twentyFourHours:[],
+          sunMoon:{},
           svg:{},
         },
         days:[]
@@ -294,9 +439,9 @@ export default {
   },
   methods:{
     async getWeather(){
-      const API_KEY = "fcdf7a43f2dc4f7e800180856230711"
+      const API_KEY = "b77f6d044b784ff99b1160139232111"
       let q = 'Moscow';
-      let days = '7'
+      let days = '3'
       let response = await axios.get(`http://api.weatherapi.com/v1/forecast.json`,
               {
                 params: {
@@ -325,6 +470,7 @@ export default {
       this.Weather.city = data.location.name;
       this.Weather.current.temp = current.temp_c;
       this.Weather.current.wind = current.wind_kph;
+      this.Weather.current.vis_km = current.vis_km;
       this.Weather.current.feel = current.feelslike_c;
       this.Weather.current.humidity = current.humidity;
       this.Weather.current.svg = this.putInSvg(current.condition.code)[0];
@@ -332,6 +478,7 @@ export default {
       this.Weather.current.background = this.putInSvg(current.condition.code)[2];
       this.Weather.current.precip_mm = current.precip_mm;
       this.Weather.current.wind_dir = current.wind_dir;
+      this.Weather.current.wind_degree = current.wind_degree;
       this.Weather.current.cloudy = current.cloud;
 
 
@@ -355,7 +502,40 @@ export default {
         time.svgName = this.putInSvg(code)[1];
         this.Weather.current.twentyFourHours.push(time);
       }
-      console.log('this.Weather.current.twentyFourHours', this.Weather.current.twentyFourHours)
+
+      this.Weather.current.sunMoon.start = forecast.forecastday[0].astro.sunrise.slice(0,-3);
+      this.Weather.current.sunMoon.end = Number(forecast.forecastday[0].astro.sunset.slice(0,2))+12+':'+ forecast.forecastday[0].astro.sunset.slice(3,5);
+      this.Weather.current.sunMoon.moon_phase = forecast.forecastday[0].astro.moon_phase.toLowerCase();
+      let array = []
+      for(let i=0; i < forecast.forecastday[0].hour.length; i++){
+        array.push(forecast.forecastday[0].hour[i].condition.code);
+        let time = (forecast.forecastday[0].hour[i].time).substring(10).trim();
+        let temp_c = Math.round(forecast.forecastday[0].hour[i].temp_c);
+
+        let cloud = forecast.forecastday[0].hour[i].cloud;
+        let humidity = forecast.forecastday[0].hour[i].humidity
+
+
+
+        this.tempDay.labels.push(time);
+        this.tempDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
+        this.tempDay.datasets[0].data.push(temp_c);
+
+        this.chartData.labels.push(time);
+        this.chartData.datasets[0].data.push(cloud);
+
+        this.SunMoon.labels.push(time);
+        this.SunMoon.datasets[1].data.push(humidity);
+        this.SunMoon.datasets[0].data.push(cloud);
+
+
+
+
+      }
+      let codeSvg = array.sort((a,b) => array.filter(v => v===a).length - array.filter(v => v===b).length).pop();
+      this.Weather.current.sunMoon.sun_phase = this.putInSvg(codeSvg)[1]
+
+      console.log('this.SunMoon', this.SunMoon)
     },
     putInSvg(codePicture){
       for(const i in this.IncomingPictures) {
@@ -391,13 +571,7 @@ export default {
     this.getCurrentData(response.data);
     this.getWeekData(response.data);
     console.log('this.chartData', this.chartData);
-    for(let i=0; i < response.data.forecast.forecastday[0].hour.length; i++){
-      let time = (response.data.forecast.forecastday[0].hour[i].time).substring(10).trim();
-      let temp_c = Math.round(response.data.forecast.forecastday[0].hour[i].temp_c);
-      this.chartData.labels.push(time);
-      this.chartData.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
-      this.chartData.datasets[0].data.push(temp_c);
-    }
+    console.log('this.Weather', this.Weather);
   },
 
 
@@ -405,8 +579,14 @@ export default {
 </script>
 
 <style lang="scss">
+
+  .sunMoonSvg,.svgDayOfTheWeek{
+    width: 185%;
+    margin: 45% auto 0 -15%;
+    display: block;
+  }
   .twentyFourHoursSvg{
-    width: 100%;
+    width: 95%;
     margin-top: -20%;
   }
   .twentyFourHoursTemp{
@@ -428,13 +608,13 @@ export default {
     font-family: 'Roboto Condensed', sans-serif;
   }
   canvas{
-    background: rgba(255, 253, 253, 0.36);
+    background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
     color: black;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
     padding: 12px 12px 6px;
     //height: 325px !important;
-    margin: 0 0 0 0;
+    margin: 0 0 2% 0;
   }
   .today{
     background: rgba(255, 255, 255, 0.66);
@@ -443,7 +623,7 @@ export default {
     text-align: left;
     color: black;
     padding: 15px;
-    margin-bottom: 3%;
+    margin-bottom: 15px;
    // height: 75vh;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
    // height: 65.7vh;
@@ -460,7 +640,9 @@ export default {
   .today_time{
     color: black;
     text-align: left;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+
   }
   hr{
     margin-top: .25rem !important;
@@ -479,11 +661,10 @@ export default {
     text-align: center;
   }
   .temp{
-    font-size: 3rem;
+    font-size: 2rem;
     line-height: 2rem;
-    margin-top: 40%;
-    //margin-top: 55%;
-   margin-left: 10%;
+    text-align: center;
+    margin-bottom: 5%;
   }
   .city{
     font-size: 2rem;
@@ -496,17 +677,16 @@ export default {
     padding: 12px 12px 6px;
     margin-bottom: 3%;
   }
-  .mainSvg{
-    margin: 40% auto 0 -15%;
-    width: 230%;
-  }
   .svgDayOfTheWeek{
    // margin-left: -10px;
   }
   .number{
-    font-size: 1.2rem;
+    font-size: 1.03rem;
     text-align: left;
     color: black;
+  }
+  .line1{
+    height: 145px;
   }
   .light, .dark{
    // width: 52px;
@@ -528,10 +708,10 @@ export default {
     margin-left: 20px;
   }
   .light{
-    margin-top: -5px;
+    margin-top: 25%;
   }
   .day{
-    background: rgb(255 253 253 / 36%);
+    background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
     color: black;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
@@ -545,14 +725,41 @@ export default {
       font-size: .9rem
     }
   }
+  .today, .feels{
+   // height: 145px;
+  }
+  .col-3{
+    padding: 0 !important;
+  }
+  .col, .col-3 {
+    .flex-container > .day{
+      width: 47%;
+      //height: 29vh;
+      margin: 0 1.5% 3%;
+    }
+  }
+  .col{
+    .flex-container > div{
+      width: 48%;
+      margin: 0 7px 7px;
+    }
+  }
   .flex-container > .day{
     width: 15.16%;
+    height: 145px;
     //height: 29vh;
     margin: 0 0.75% 1%;
   }
   .flex-container{
     display: flex;
     flex-wrap: wrap;
+  }
+  .feels .flex-container > div{
+    width: 100%;
+    margin: 0;
+  }
+  .col{
+    padding: 0 3%;
   }
   @media screen and (min-width: 768px) and (max-width: 992px){
     .today{
