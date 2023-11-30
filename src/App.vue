@@ -4,35 +4,55 @@
         <h1>Weather Forecast</h1>
         <b-row>
           <b-col cols="4">
+            <div class="city">{{Weather.city}}</div>
             <div class="today">
-              <h2>{{date.toLocaleString('en-US', { weekday: 'long' })}}</h2>
-              <hr>
-              <b-row class="today_time">
-                <b-col >
-                  {{date.toLocaleDateString()}}
+              <b-row>
+                <b-col>
+                  <b-row>
+                    <b-col>
+                      <component  :is="Weather.current.svg" class="mainSvg"/>
+                    </b-col>
+                    <b-col>
+                      <div class="temp">{{Math.round(Weather.current.temp)}}°</div>
+                    </b-col>
+                  </b-row>
+                  <b style="margin-left: 35%">{{Weather.current.name}}</b>
                 </b-col>
-                <b-col cols="4">
-                  {{date.toLocaleTimeString().slice(0,-3)}}
+                <b-col>
+                  <h2>{{date.toLocaleString('en-US', { weekday: 'long' })}}</h2>
+                  <div>{{date.toLocaleDateString()}}</div>
+                  <div>{{date.toLocaleTimeString().slice(0,-3)}}</div>
                 </b-col>
               </b-row>
-              <hr>
-              <component  :is="Weather.current.svg" width="95%"/>
-              <div class="now">
-                <div class="temp">{{Math.round(Weather.current.temp)}}°</div>
-                <div>{{Weather.city}}</div>
-              </div>
-              <hr>
+            </div>
+            <div class="feels">
+              <b-row>
+                <b-col v-for="(day, index) in Weather.current.twentyFourHours" :key="index">
+                  <p><b>{{day.name}}</b></p>
+                  <component :key="index" :is="day.svg" class="twentyFourHoursSvg"/>
+                  <div class="twentyFourHoursTemp">{{day.temp}}</div>
+                  <p class="conditions"><b>{{day.svgName}}</b></p>
+                </b-col>
+              </b-row>
+            </div>
+            <div class="feels">
               <div class="number">
                 Feels like: {{Math.round(Weather.current.feel)}}°
                 <br>
+                Cloudy: {{Weather.current.cloudy}}%
+                <br>
                 Humidity: {{Weather.current.humidity}}%
+                <br/>
+                Precipitation: {{Weather.current.precip_mm}} mm
                 <br>
                 Wind: {{Weather.current.wind}} km/h
+                <br/>
+                Wind direction: {{Weather.current.wind_dir}}
               </div>
             </div>
           </b-col>
           <b-col>
-            <div class="flex-container" >
+            <div class="flex-container">
               <div class="day" v-for="(day, index) in Weather.days" :key="index">
                 <b-row>
                   <b-col>
@@ -43,28 +63,21 @@
                   </b-col>
                 </b-row>
                 <hr/>
-                <b-row>
-                  <b-col>
-                    <component :key="index" :is="day.svg" width="105%" class="svgDayOfTheWeek"/>
-                  </b-col>
-                  <b-col cols="5">
+                    <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>
                     <div class="darkLight">
-                      <div class="dark">
+                      <div class="light">
                         {{Math.round(day.maxTemp)}}°
                       </div>
                       <div class="light">
                         {{Math.round(day.minTemp)}}°
                       </div>
                     </div>
-                  </b-col>
-                </b-row>
-               <b>{{day.name}}</b>
+                <p class="conditions"><b>{{day.name}}</b></p>
               </div>
             </div>
+            <WeatherChart :chartOptions="chartOptions" :chartData="chartData" type="Line"/>
           </b-col>
         </b-row>
-      <WeatherChart :chartOptions="chartOptions" :chartData="chartData" :type="type"/>
-
       </b-container>
   </div>
 </template>
@@ -100,7 +113,7 @@ export default {
       loading: true,
       chartData: {
         labels: [],
-        datasets: [ { label: 'Mounths', data: [] } ]
+        datasets: [ { label: 'Hourly forecast', data: [] } ]
       },
       chartOptions: {
         responsive: true,
@@ -114,6 +127,7 @@ export default {
           wind:'',
           feel:'',
           humidity:'',
+          twentyFourHours:[],
           svg:{},
         },
         days:[]
@@ -307,14 +321,41 @@ export default {
     },
     getCurrentData(data){
       let current =  data.current;
+      let forecast = data.forecast;
       this.Weather.city = data.location.name;
       this.Weather.current.temp = current.temp_c;
       this.Weather.current.wind = current.wind_kph;
       this.Weather.current.feel = current.feelslike_c;
       this.Weather.current.humidity = current.humidity;
       this.Weather.current.svg = this.putInSvg(current.condition.code)[0];
-      console.log("Weather.current.svg", this.Weather.current.svg)
+      this.Weather.current.name = this.putInSvg(current.condition.code)[1];
       this.Weather.current.background = this.putInSvg(current.condition.code)[2];
+      this.Weather.current.precip_mm = current.precip_mm;
+      this.Weather.current.wind_dir = current.wind_dir;
+      this.Weather.current.cloudy = current.cloud;
+
+
+      for(let i=6; i < forecast.forecastday[0].hour.length; i=i+6){
+        let time = {};
+
+        time.temp = forecast.forecastday[0].hour[i].temp_c;
+        let times = forecast.forecastday[0].hour[i].time.substring(10).trim();
+
+        if(times === '06:00' && i === 6){
+          time.name = 'Morning'
+        }
+        if(times === '12:00' && i === 12){
+          time.name = 'Afternoon'
+        }
+        if(times === '18:00' && i === 18){
+          time.name = 'Evening'
+        }
+        let code = forecast.forecastday[0].hour[i].condition.code;
+        time.svg = this.putInSvg(code)[0];
+        time.svgName = this.putInSvg(code)[1];
+        this.Weather.current.twentyFourHours.push(time);
+      }
+      console.log('this.Weather.current.twentyFourHours', this.Weather.current.twentyFourHours)
     },
     putInSvg(codePicture){
       for(const i in this.IncomingPictures) {
@@ -336,11 +377,8 @@ export default {
         day.name = this.putInSvg(code)[1];
         day.number = new Date(this.getDayMs(jj)).toLocaleDateString();
 
-        this.chartData.labels.push(day.number);
-        this.chartData.datasets[0].data.push(Math.round(day.minTemp));
-        console.log('datasets', {datasets:this.chartData.datasets })
-
-        console.log('labels', {labels:this.chartData.labels })
+        // this.chartData.labels.push(day.number);
+        // this.chartData.datasets[0].data.push(Math.round(day.minTemp));
         this.Weather.days.push(day);
 
       }
@@ -352,7 +390,14 @@ export default {
     console.log('created', response.data);
     this.getCurrentData(response.data);
     this.getWeekData(response.data);
-    console.log('this.chartData', this.chartData)
+    console.log('this.chartData', this.chartData);
+    for(let i=0; i < response.data.forecast.forecastday[0].hour.length; i++){
+      let time = (response.data.forecast.forecastday[0].hour[i].time).substring(10).trim();
+      let temp_c = Math.round(response.data.forecast.forecastday[0].hour[i].temp_c);
+      this.chartData.labels.push(time);
+      this.chartData.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
+      this.chartData.datasets[0].data.push(temp_c);
+    }
   },
 
 
@@ -360,6 +405,15 @@ export default {
 </script>
 
 <style lang="scss">
+  .twentyFourHoursSvg{
+    width: 100%;
+    margin-top: -20%;
+  }
+  .twentyFourHoursTemp{
+    font-size: 1.6rem;
+    text-align: center;
+    margin-top: -10%;
+  }
   h1{
     margin-bottom: 1rem !important;
     text-shadow: 1.5px 1.5px 1.5px #f3e0e0;
@@ -373,12 +427,35 @@ export default {
     padding: 45px 0;
     font-family: 'Roboto Condensed', sans-serif;
   }
-  .today{
-    background: rgb(255 253 253 / 36%);
+  canvas{
+    background: rgba(255, 253, 253, 0.36);
     border-radius: 10px;
-    padding: 15px;
-    height: 75vh;
+    color: black;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+    padding: 12px 12px 6px;
+    //height: 325px !important;
+    margin: 0 0 0 0;
+  }
+  .today{
+    background: rgba(255, 255, 255, 0.66);
+    border-radius: 10px;
+    font-size: 1.4rem;
+    text-align: left;
+    color: black;
+    padding: 15px;
+    margin-bottom: 3%;
+   // height: 75vh;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+   // height: 65.7vh;
+  }
+  .feels{
+    background: rgba(255, 255, 255, 0.66);
+    border-radius: 10px;
+    margin-bottom: 3%;
+    padding: 15px;
+    // height: 75vh;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+    // height: 65.7vh;
   }
   .today_time{
     color: black;
@@ -386,8 +463,8 @@ export default {
     font-size: 1.3rem;
   }
   hr{
-    margin-top: .5rem !important;
-    margin-bottom: .5rem !important;
+    margin-top: .25rem !important;
+    margin-bottom: .25rem !important;
     background: transparent;
     box-shadow: 0 .5px .5px rgba(0, 0, 0, 0.25);
   }
@@ -402,26 +479,50 @@ export default {
     text-align: center;
   }
   .temp{
-    font-size: 3.5rem;
-    line-height: 3.5rem;
+    font-size: 3rem;
+    line-height: 2rem;
+    margin-top: 40%;
+    //margin-top: 55%;
+   margin-left: 10%;
+  }
+  .city{
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.66);
+    border-radius: 10px;
+    color: black;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+    padding: 12px 12px 6px;
+    margin-bottom: 3%;
+  }
+  .mainSvg{
+    margin: 40% auto 0 -15%;
+    width: 230%;
   }
   .svgDayOfTheWeek{
-    margin-left: -10px;
+   // margin-left: -10px;
   }
   .number{
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     text-align: left;
     color: black;
   }
   .light, .dark{
-    width: 52px;
-    height: 45px;
-    background: #f1fbff;
-    padding: 5px;
-    font-size: 1.8rem;
+   // width: 52px;
+    height: 35px;
+   // background: #f1fbff;
+    //padding: 5px;
+    font-size: 1.6rem;
     text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+   // border-radius: 10px;
+    //box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+  }
+  .conditions{
+    font-size: 0.85rem !important;
+    line-height: 1rem;
+    text-align: center;
+    margin-bottom: 0 !important;
   }
   .dark{
     margin-left: 20px;
@@ -436,18 +537,18 @@ export default {
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
     padding: 12px 12px 6px;
     h2{
-      font-size: 1.3rem !important;
+      font-size: 1rem !important;
       font-weight: 500;
       margin-bottom: 0 !important;
     }
     .today_time{
-      font-size: 1rem
+      font-size: .9rem
     }
   }
   .flex-container > .day{
-    width: 43%;
-    height: 23.6vh;
-    margin: 0 1% 2%;
+    width: 15.16%;
+    //height: 29vh;
+    margin: 0 0.75% 1%;
   }
   .flex-container{
     display: flex;
