@@ -53,7 +53,7 @@
             </div>
             <div>
               <h4>Twenty-four hours:</h4>
-              <div class="feels line1">
+              <div class="feels ">
                 <b-row>
                   <b-col v-for="(day, index) in Weather.current.twentyFourHours" :key="index">
                     <p><b>{{day.name}}</b></p>
@@ -68,25 +68,10 @@
           <b-col>
             <div class="flex-container">
               <div>
-                <h4>The emergence of the sun and moon:</h4>
-
-<!--                  <b-row>-->
-<!--                    <b-col>-->
-<!--                      <p><b>Light:</b></p>-->
-<!--                      <component :is="Svgs[0].svg" class="sunMoonSvg"/>-->
-<!--                      <p class="conditions"><b> from {{Weather.current.sunMoon.start}} to {{Weather.current.sunMoon.end}}</b></p>-->
-<!--                      <p class="conditions"><b>{{Weather.current.sunMoon.sun_phase}}</b></p>-->
-<!--                    </b-col>-->
-<!--                    <b-col>-->
-<!--                      <p><b>Dark:</b></p>-->
-<!--                      <component :is="Svgs[0].svg" class="sunMoonSvg"/>-->
-<!--                      <p class="conditions"><b> from {{Weather.current.sunMoon.end}} to {{Weather.current.sunMoon.start}}</b></p>-->
-<!--                      <p class="conditions"><b>{{Weather.current.sunMoon.moon_phase}}</b></p>-->
-<!--                    </b-col>-->
-<!--                  </b-row>-->
+                <h4>Light and dark time of day:</h4>
                   <div class="flex-container">
                     <div class="day">
-                      <p class="day_name"><b>Light:</b></p>
+                      <p class="day_name">Light time of day:</p>
                       <hr/>
                       <b-row>
                         <b-col cols="4">
@@ -101,7 +86,7 @@
                       </b-row>
                     </div>
                     <div class="day">
-                        <p class="day_name"><b>Dark:</b></p>
+                        <p class="day_name">Dark time of day:</p>
                         <hr/>
                         <b-row>
                           <b-col cols="4">
@@ -115,18 +100,6 @@
                           </b-col>
                         </b-row>
                       </div>
-                      <!--                    <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>-->
-                      <!--                    <div class="darkLight">-->
-                      <!--                      <div class="light">-->
-                      <!--                        {{Math.round(day.maxTemp)}}°-->
-                      <!--                      </div>-->
-                      <!--                      <div class="light">-->
-                      <!--                        {{Math.round(day.minTemp)}}°-->
-                      <!--                      </div>-->
-                      <!--                    </div>-->
-
-
-
                 </div>
               </div>
               <div>
@@ -173,13 +146,13 @@
                 <WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/>
               </div>
               <div>
-                <WeatherChart :chartOptions="chartOptions" :chartData="SunMoon" type="Line"/>
+                <WeatherChart :chartOptions="chartOptions" :chartData="cloudDay" type="Line"/>
               </div>
               <div>
-                <WeatherChart :chartOptions="chartOptions" :chartData="SunMoon" type="Line"/>
+                <WeatherChart :chartOptions="chartOptions" :chartData="humidityDay" type="Line"/>
               </div>
               <div>
-                <WeatherChart :chartOptions="chartOptions" :chartData="SunMoon" type="Line"/>
+                <WeatherChart :chartOptions="chartOptions" :chartData="windDay" type="Line"/>
               </div>
             </div>
           </b-col>
@@ -229,6 +202,25 @@ export default {
           { label: 'Average temperature', data: [] }
         ]
       },
+      cloudDay: {
+        labels: [],
+        datasets: [
+          { label: 'Cloudy', data: [] }
+        ]
+      },
+      humidityDay: {
+        labels: [],
+        datasets: [
+          { label: 'Humidity', data: [] }
+        ]
+      },
+      windDay: {
+        labels: [],
+        datasets: [
+          { label: 'Wind', data: [] }
+        ]
+      },
+
       chartdata2: {
         labels: ['Январь', 'Humidity'],
         datasets: [
@@ -513,20 +505,34 @@ export default {
         let temp_c = Math.round(forecast.forecastday[0].hour[i].temp_c);
 
         let cloud = forecast.forecastday[0].hour[i].cloud;
-        let humidity = forecast.forecastday[0].hour[i].humidity
-
+        let humidity = forecast.forecastday[0].hour[i].humidity;
+        let wind = forecast.forecastday[0].hour[i].wind_kph;
 
 
         this.tempDay.labels.push(time);
         this.tempDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
         this.tempDay.datasets[0].data.push(temp_c);
 
-        this.chartData.labels.push(time);
-        this.chartData.datasets[0].data.push(cloud);
+        this.cloudDay.labels.push(time);
+        this.cloudDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
+        this.cloudDay.datasets[0].data.push(cloud);
 
-        this.SunMoon.labels.push(time);
-        this.SunMoon.datasets[1].data.push(humidity);
-        this.SunMoon.datasets[0].data.push(cloud);
+        this.humidityDay.labels.push(time);
+        this.humidityDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
+        this.humidityDay.datasets[0].data.push(humidity);
+
+        this.windDay.labels.push(time);
+        this.windDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
+        this.windDay.datasets[0].data.push(wind);
+
+
+
+        // this.chartData.labels.push(time);
+        // this.chartData.datasets[0].data.push(cloud);
+        //
+        // this.SunMoon.labels.push(time);
+        // this.SunMoon.datasets[1].data.push(humidity);
+        // this.SunMoon.datasets[0].data.push(cloud);
 
 
 
@@ -579,15 +585,23 @@ export default {
 </script>
 
 <style lang="scss">
-
-  .sunMoonSvg,.svgDayOfTheWeek{
+  .day_name{
+    text-align: left;
+    margin-bottom: 0 !important;
+  }
+  .sunMoonSvg{
+    width: 285%;
+    margin: 45% auto 0 -45%;
+    display: block;
+  }
+  .svgDayOfTheWeek{
     width: 185%;
     margin: 45% auto 0 -15%;
     display: block;
   }
   .twentyFourHoursSvg{
-    width: 95%;
-    margin-top: -20%;
+    width: 130%;
+    margin: -20% auto 0 -10%;
   }
   .twentyFourHoursTemp{
     font-size: 1.6rem;
