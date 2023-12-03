@@ -111,12 +111,15 @@
             <h4>Hourly forecast</h4>
             <div class="flex-container">
               <div><WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
+              <div><WeatherChart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
               <div><WeatherChart :chartOptions="chartOptions" :chartData="cloudDay" type="Line"/></div>
               <div><WeatherChart :chartOptions="chartOptions" :chartData="humidityDay" type="Line"/></div>
-              <div><WeatherChart :chartOptions="chartOptions" :chartData="windDay" type="Line"/></div>
             </div>
           </b-col>
         </b-row>
+      <div  class="flex-container">
+        <component v-for="svg in SvgsDay" :is="svg.svg" class="dd"/>
+      </div>
       </b-container>
   </div>
 </template>
@@ -150,16 +153,25 @@ export default {
   data(){
     return{
       loading: true,
-      chartData: {
-        labels: [],
-        datasets: [
-                { label: 'Hourly forecast', data: [] }
-        ]
-      },
       tempDay: {
         labels: [],
         datasets: [
-          { label: 'Average temperature', data: [] }
+          { label: 'Average temperature', data: [] },
+          { label: 'Feels like temperature', data: [] }
+        ]
+      },
+      cloudHumidityDay:{
+        labels: [],
+        datasets: [
+          { label: 'Cloudy', data: [] },
+          { label: 'Humidity', data: [] }
+        ]
+      },
+      rainSnowDay:{
+        labels: [],
+        datasets: [
+          { label: 'Chance of rain as percentage', data: [] },
+          { label: 'Chance of snow as percentage', data: [] }
         ]
       },
       cloudDay: {
@@ -174,58 +186,11 @@ export default {
           { label: 'Humidity', data: [] }
         ]
       },
-      windDay: {
-        labels: [],
-        datasets: [
-          { label: 'Wind', data: [],    borderWidth: 1 }
-        ]
-      },
-
-      chartdata2: {
-        labels: ['Январь', 'Humidity'],
-        datasets: [
-          {
-            label: 'Данные 1',
-            backgroundColor: '#f87979',
-            data: [40, 20]
-          },
-          {
-            label: 'Данные 2',
-            backgroundColor: '#f87979',
-            data: [34, 67]
-          }
-        ]
-      },
-      SunMoon:{
-        labels: [],
-        datasets: [
-          {
-            label: 'Cloudy',
-            backgroundColor: '#f87979',
-            data: []
-          },
-          {
-            label: 'Humidity',
-            backgroundColor: '#f87979',
-            data: []
-          }
-        ]
-      },
       chartOptions: {
         responsive: true,
-        plugins: {
-          legend: {
-            labels: {
-              // This more specific font property overrides the global property
-              font: {
-                size: 14
-              }
-            }
-          }
-        }
+        plugins: {legend: {labels: {font: {size: 14}}}}
       },
       type: "Line",
-      svg:partlyRaining,
       Weather:{
         city:'',
         current:{
@@ -240,7 +205,111 @@ export default {
         days:[]
       },
       date:new Date(),
-      Svgs:[
+      SvgsDay:[
+        {
+          name:'sunny',
+          svg:sunny,
+          desk:'Солнечно',
+          background:'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, #fff3d0 44.9%, #eaf7fc 96.1%)',
+        },
+        {
+          name:'partly cloudy',
+          svg: partlyCloudy,
+          desk:'Переменная облачность',
+          background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, rgb(200, 223, 244) 44.9%, rgb(234, 247, 252) 96.1%)'
+        },
+        {
+          name:'variable rain and snow',
+          svg: partlyRainingAndSnowing,
+          desk:'Переменный дождь и снег',
+          background: 'linear-gradient(179.1deg, #add2f5 -1.9%, #D5F3FF 44.9%, #ffe971 96.1%)'
+        },
+        {
+          name:'variable rain',
+          svg: partlyRaining,
+          desk:'Переменный дождь',
+          background: 'linear-gradient(179.1deg, rgb(254, 213, 102) -1.9%, rgb(200 223 244) 44.9%, rgb(234, 247, 252) 96.1%)'
+        },
+        {
+          name:'variable snow',
+          svg: partlySnowing,
+          desk:'Переменный снег',
+          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #f3ece3 96.1%)'
+        },
+        {
+          name:'drizzling rain',
+          svg:drizzlingRain,
+          desk:'Моросящий дождь',
+          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
+        },
+        {
+          name:'rain',
+          svg:rain,
+          desk:'Дождь',
+          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
+        },
+        {
+          name:'cloudy',
+          svg:cloudy,
+          desk:'Облачно',
+          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #bedfec 44.9%, #eaf7fc 96.1%)'
+        },
+        {
+          name:'drizzling snow',
+          svg:drizzlingSnow,
+          desk:'Моросящий снег',
+          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+        },
+        {
+          name:'snowy',
+          svg:snowy,
+          desk:'Снежно',
+          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+        },
+        {
+          name:'drizzling rain and snow',
+          svg:drizzlingRainAndSnow,
+          desk:'Моросящий дождь и снег',
+          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+        },
+        {
+          name:'rain and snow',
+          svg:rainAndSnow,
+          desk:'Дождь и снег',
+          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+        },
+        {
+          name:'storm',
+          svg:storm,
+          desk:'Гроза',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
+        },
+        {
+          name:'sunnyStorm',
+          svg:sunnyStorm,
+          desk:'Гроза и солнце',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #dedbd1 96.1%)'
+        },
+        {
+          name:'snowStorm',
+          svg:snowStorm,
+          desk:'Гроза и снег',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
+        },
+        {
+          name:'sunnySnowStorm',
+          svg:sunnySnowStorm,
+          desk:'Гроза, солнце и снег',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
+        },
+        {
+          name:'overcast',
+          svg:overcast,
+          desk:'Пасмурно',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
+        },
+      ],
+      SvgsNight:[
         {
           name:'sunny',
           svg:sunny,
@@ -473,16 +542,30 @@ export default {
         array.push(forecast.forecastday[0].hour[i].condition.code);
         let time = (forecast.forecastday[0].hour[i].time).substring(10).trim();
         let temp_c = Math.round(forecast.forecastday[0].hour[i].temp_c);
-
+        let feelslike_c = Math.round(forecast.forecastday[0].hour[i].feelslike_c);
+        let chance_of_rain = Math.round(forecast.forecastday[0].hour[i].chance_of_rain);
+        let chance_of_snow = Math.round(forecast.forecastday[0].hour[i].chance_of_snow);
         let cloud = forecast.forecastday[0].hour[i].cloud;
         let humidity = forecast.forecastday[0].hour[i].humidity;
-        let wind = forecast.forecastday[0].hour[i].wind_kph;
-
+        
 
         this.tempDay.labels.push(time);
         this.tempDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)';
-        this.tempDay.datasets[0].pointRadius = 9;
         this.tempDay.datasets[0].data.push(temp_c);
+        this.tempDay.datasets[1].backgroundColor = '#7499b8';
+        this.tempDay.datasets[1].data.push(feelslike_c);
+
+        this.cloudHumidityDay.labels.push(time);
+        this.cloudHumidityDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)';
+        this.cloudHumidityDay.datasets[0].data.push(cloud);
+        this.cloudHumidityDay.datasets[1].backgroundColor = '#7499b8';
+        this.cloudHumidityDay.datasets[1].data.push(humidity);
+
+        this.rainSnowDay.labels.push(time);
+        this.rainSnowDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)';
+        this.rainSnowDay.datasets[0].data.push(chance_of_rain);
+        this.rainSnowDay.datasets[1].backgroundColor = '#7499b8';
+        this.rainSnowDay.datasets[1].data.push(chance_of_snow);
 
         this.cloudDay.labels.push(time);
         this.cloudDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
@@ -491,34 +574,16 @@ export default {
         this.humidityDay.labels.push(time);
         this.humidityDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
         this.humidityDay.datasets[0].data.push(humidity);
-
-        this.windDay.labels.push(time);
-        this.windDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
-        this.windDay.datasets[0].data.push(wind);
-
-
-
-        // this.chartData.labels.push(time);
-        // this.chartData.datasets[0].data.push(cloud);
-        //
-        // this.SunMoon.labels.push(time);
-        // this.SunMoon.datasets[1].data.push(humidity);
-        // this.SunMoon.datasets[0].data.push(cloud);
-
-
-
-
+        
       }
       let codeSvg = array.sort((a,b) => array.filter(v => v===a).length - array.filter(v => v===b).length).pop();
       this.Weather.current.sunMoon.sun_phase = this.putInSvg(codeSvg)[1]
-
-      console.log('this.SunMoon', this.SunMoon)
     },
     putInSvg(codePicture){
       for(const i in this.IncomingPictures) {
         for(const code of this.IncomingPictures[i].codes) {
           if(code === codePicture){
-            return [this.Svgs[i].svg, this.Svgs[i].name, this.Svgs[i].background ];
+            return [this.SvgsDay[i].svg, this.SvgsDay[i].name, this.SvgsDay[i].background ];
           }
         }
       }
@@ -533,9 +598,6 @@ export default {
         day.svg = this.putInSvg(code)[0];
         day.name = this.putInSvg(code)[1];
         day.number = new Date(this.getDayMs(jj)).toLocaleDateString();
-
-        // this.chartData.labels.push(day.number);
-        // this.chartData.datasets[0].data.push(Math.round(day.minTemp));
         this.Weather.days.push(day);
 
       }
@@ -547,7 +609,6 @@ export default {
     console.log('created', response.data);
     this.getCurrentData(response.data);
     this.getWeekData(response.data);
-    console.log('this.chartData', this.chartData);
     console.log('this.Weather', this.Weather);
   },
 
@@ -724,6 +785,10 @@ export default {
     width: 15.16%;
     height: 125px;
     //height: 29vh;
+    margin: 0 0.75% 1%;
+  }
+  .flex-container > .dd{
+    width: 15.16%;
     margin: 0 0.75% 1%;
   }
   .flex-container{
