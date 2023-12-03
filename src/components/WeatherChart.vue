@@ -1,9 +1,9 @@
 <template>
-    <LineChart ref="chart" v-if="showChart && type == 'Line'"
+    <LineChart ref="chart" v-if="showChart && type === 'Line'"
             :options="chartOptions"
             :data="chartData"
     />
-    <BarChart ref="chart" v-else-if="showChart && type == 'Bar'"
+    <BarChart ref="chart" v-else-if="showChart && type === 'Bar'"
                :options="chartOptions"
                :data="chartData"
     />
