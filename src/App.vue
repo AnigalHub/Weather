@@ -59,7 +59,7 @@
                       <hr/>
                       <b-row>
                         <b-col cols="4">
-                          <component :is="Svgs[0].svg" class="sunMoonSvg"/>
+                          <component :is="SvgsDay[0].svg" class="sunMoonSvg"/>
                         </b-col>
                         <b-col>
                           <p class="light conditions"><b> from {{Weather.current.sunMoon.start}} to {{Weather.current.sunMoon.end}}</b></p>
@@ -72,7 +72,7 @@
                       <hr/>
                       <b-row>
                         <b-col cols="4">
-                          <component :is="Svgs[0].svg" class="sunMoonSvg"/>
+                          <component :is="SvgsNight[0].svg" class="sunMoonSvg"/>
                         </b-col>
                         <b-col>
                           <p class="light conditions"><b> from {{Weather.current.sunMoon.end}} to {{Weather.current.sunMoon.start}}</b></p>
@@ -120,6 +120,9 @@
       <div  class="flex-container">
         <component v-for="svg in SvgsDay" :is="svg.svg" class="dd"/>
       </div>
+      <div  class="flex-container">
+        <component v-for="svg in SvgsNight" :is="svg.svg" class="dd"/>
+      </div>
       </b-container>
   </div>
 </template>
@@ -128,10 +131,15 @@
   import axios from 'axios'
 
   import sunny from "./components/icons/sunny";
+  import moon from "./components/icons/moon";
   import partlyCloudy from "@/components/icons/partlyCloudy";
+  import partlyCloudyMoon from "@/components/icons/partlyCloudyMoon";
   import partlyRainingAndSnowing from "@/components/icons/partlyRainingAndSnowing";
+  import partlyRainingAndSnowingMoon from "@/components/icons/partlyRainingAndSnowingMoon";
   import partlyRaining from "@/components/icons/partlyRaining";
+  import partlyRainingMoon from "@/components/icons/partlyRainingMoon";
   import partlySnowing from "@/components/icons/partlySnowing";
+  import partlySnowingMoon from "@/components/icons/partlySnowingMoon";
   import drizzlingRain from "./components/icons/drizzlingRain";
   import rain from "./components/icons/rain";
   import cloudy from "@/components/icons/cloudy";
@@ -141,9 +149,12 @@
   import rainAndSnow from "@/components/icons/rainAndSnow";
   import storm from "@/components/icons/storm";
   import sunnyStorm from "@/components/icons/sunnyStorm";
+  import moonStorm from "@/components/icons/moonStorm";
   import snowStorm from "@/components/icons/snowStorm";
   import sunnySnowStorm from "@/components/icons/sunnySnowStorm";
+  import moonSnowStorm from "@/components/icons/moonSnowStorm";
   import overcast from "@/components/icons/overcast";
+  import fog from "@/components/icons/fog";
   import WeatherChart from "@/components/WeatherChart"
 
 
@@ -190,7 +201,6 @@ export default {
         responsive: true,
         plugins: {legend: {labels: {font: {size: 14}}}}
       },
-      type: "Line",
       Weather:{
         city:'',
         current:{
@@ -308,35 +318,41 @@ export default {
           desk:'Пасмурно',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
+        {
+          name:'blizzard',
+          svg:fog,
+          desk:'Метель',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
+        },
       ],
       SvgsNight:[
         {
           name:'sunny',
-          svg:sunny,
+          svg:moon,
           desk:'Солнечно',
           background:'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, #fff3d0 44.9%, #eaf7fc 96.1%)',
         },
         {
           name:'partly cloudy',
-          svg: partlyCloudy,
+          svg: partlyCloudyMoon,
           desk:'Переменная облачность',
           background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, rgb(200, 223, 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
           name:'variable rain and snow',
-          svg: partlyRainingAndSnowing,
+          svg: partlyRainingAndSnowingMoon,
           desk:'Переменный дождь и снег',
           background: 'linear-gradient(179.1deg, #add2f5 -1.9%, #D5F3FF 44.9%, #ffe971 96.1%)'
         },
         {
           name:'variable rain',
-          svg: partlyRaining,
+          svg: partlyRainingMoon,
           desk:'Переменный дождь',
           background: 'linear-gradient(179.1deg, rgb(254, 213, 102) -1.9%, rgb(200 223 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
           name:'variable snow',
-          svg: partlySnowing,
+          svg: partlySnowingMoon,
           desk:'Переменный снег',
           background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #f3ece3 96.1%)'
         },
@@ -390,8 +406,8 @@ export default {
         },
         {
           name:'sunnyStorm',
-          svg:sunnyStorm,
-          desk:'Гроза и солнце',
+          svg:moonStorm,
+          desk:'Гроза и луна',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #dedbd1 96.1%)'
         },
         {
@@ -402,14 +418,20 @@ export default {
         },
         {
           name:'sunnySnowStorm',
-          svg:sunnySnowStorm,
-          desk:'Гроза, солнце и снег',
+          svg:moonSnowStorm,
+          desk:'Гроза, луна и снег',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
           name:'overcast',
           svg:overcast,
           desk:'Пасмурно',
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
+        },
+        {
+          name:'blizzard',
+          svg:fog,
+          desk:'Метель',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
       ],
@@ -463,7 +485,10 @@ export default {
           codes:[1279]
         },
         {
-          codes:[1009,1030, 1135, 1147]
+          codes:[1009]
+        },
+        {
+          codes:[1030, 1135, 1147]
         },
       ]
     }
@@ -504,9 +529,9 @@ export default {
       this.Weather.current.vis_km = current.vis_km;
       this.Weather.current.feel = current.feelslike_c;
       this.Weather.current.humidity = current.humidity;
-      this.Weather.current.svg = this.putInSvg(current.condition.code)[0];
-      this.Weather.current.name = this.putInSvg(current.condition.code)[1];
-      this.Weather.current.background = this.putInSvg(current.condition.code)[2];
+      this.Weather.current.svg = this.putInSvg(this.Weather.current.is_day,current.condition.code)[0];
+      this.Weather.current.name = this.putInSvg(this.Weather.current.is_day,current.condition.code)[1];
+      this.Weather.current.background = this.putInSvg(this.Weather.current.is_day,current.condition.code)[2];
       this.Weather.current.precip_mm = current.precip_mm;
       this.Weather.current.wind_dir = current.wind_dir;
       this.Weather.current.wind_degree = current.wind_degree;
@@ -519,18 +544,24 @@ export default {
         time.temp = forecast.forecastday[0].hour[i].temp_c;
         let times = forecast.forecastday[0].hour[i].time.substring(10).trim();
 
+        let code = forecast.forecastday[0].hour[i].condition.code;
+
         if(times === '06:00' && i === 6){
-          time.name = 'Morning'
+          time.name = 'Morning';
+          time.svg = this.putInSvg(0,code)[0];
+          time.svgName = this.putInSvg(0,code)[1];
         }
         if(times === '12:00' && i === 12){
-          time.name = 'Afternoon'
+          time.name = 'Afternoon';
+          time.svg = this.putInSvg(0,code)[0];
+          time.svgName = this.putInSvg(0,code)[1];
         }
         if(times === '18:00' && i === 18){
-          time.name = 'Evening'
+          time.name = 'Evening';
+          time.svg = this.putInSvg(1,code)[0];
+          time.svgName = this.putInSvg(1,code)[1];
         }
-        let code = forecast.forecastday[0].hour[i].condition.code;
-        time.svg = this.putInSvg(code)[0];
-        time.svgName = this.putInSvg(code)[1];
+
         this.Weather.current.twentyFourHours.push(time);
       }
 
@@ -577,13 +608,16 @@ export default {
         
       }
       let codeSvg = array.sort((a,b) => array.filter(v => v===a).length - array.filter(v => v===b).length).pop();
-      this.Weather.current.sunMoon.sun_phase = this.putInSvg(codeSvg)[1]
+      this.Weather.current.sunMoon.sun_phase = this.putInSvg(this.Weather.current.is_day,codeSvg)[1]
     },
-    putInSvg(codePicture){
+    putInSvg(is_day, codePicture){
       for(const i in this.IncomingPictures) {
         for(const code of this.IncomingPictures[i].codes) {
           if(code === codePicture){
-            return [this.SvgsDay[i].svg, this.SvgsDay[i].name, this.SvgsDay[i].background ];
+            if(is_day === 0){
+              return [this.SvgsDay[i].svg, this.SvgsDay[i].name, this.SvgsDay[i].background ];
+            }
+            return [this.SvgsNight[i].svg, this.SvgsNight[i].name, this.SvgsNight[i].background ];
           }
         }
       }
@@ -595,8 +629,8 @@ export default {
         day.maxTemp = forecast.forecastday[jj].day.maxtemp_c;
         day.minTemp = forecast.forecastday[jj].day.mintemp_c;
         let code = forecast.forecastday[jj].day.condition.code;
-        day.svg = this.putInSvg(code)[0];
-        day.name = this.putInSvg(code)[1];
+        day.svg = this.putInSvg(0,code)[0];
+        day.name = this.putInSvg(0,code)[1];
         day.number = new Date(this.getDayMs(jj)).toLocaleDateString();
         this.Weather.days.push(day);
 
