@@ -6,33 +6,33 @@
           <b-col cols="3">
 <!--            <div class="city">{{Weather.city}}</div>-->
             <h4>Today:</h4>
-            <div class="today line1">
+            <div class="today line">
               <b-row>
                 <b-col cols="5">
                   <component  :is="Weather.current.svg" class="mainSvg"/>
-                  <div class="temp">{{Math.round(Weather.current.temp)}}°</div>
+                  <p class="temp">{{Math.round(Weather.current.temp)}}°</p>
                   <p class="conditions"><b>{{Weather.current.name}}</b></p>
                 </b-col>
-                <b-col>
-                  <p class="today_time"><b>{{date.toLocaleString('en-US', { weekday: 'long' })}}</b></p>
+                <b-col class="today_time">
+                  <p><b>{{date.toLocaleString('en-US', { weekday: 'long' })}}</b></p>
                   <hr/>
-                  <p class="today_time">{{date.toLocaleDateString()}}</p>
-                  <p class="today_time">{{date.toLocaleTimeString().slice(0,-3)}}</p>
+                  <p>{{date.toLocaleDateString()}}</p>
+                  <p>{{date.toLocaleTimeString().slice(0,-3)}}</p>
                   <hr/>
-                  <p class="today_time"> Feels like: {{Math.round(Weather.current.feel)}}°</p>
+                  <p>Feels like: {{Math.round(Weather.current.feel)}}°</p>
                 </b-col>
               </b-row>
             </div>
             <h4>Detailed description:</h4>
             <div class="feels">
               <div class="number flex-container">
-                <div>Cloudy:<b>{{Weather.current.cloudy}}%</b></div>
-                <div>Humidity: <b>{{Weather.current.humidity}}%</b></div>
-                <div>Precipitation: <b>{{Weather.current.precip_mm}} mm</b></div>
-                <div>Wind: <b>{{Weather.current.wind}} km/h</b></div>
-                <div>Visibility:<b>{{Weather.current.vis_km}} km</b></div>
-                <div>Wind direction by compass: <b>{{Weather.current.wind_dir}}</b></div>
-                <div>Wind direction in degree: <b>{{Weather.current.wind_degree}}</b></div>
+                <p>Cloudy:<b>{{Weather.current.cloudy}}%</b></p>
+                <p>Humidity: <b>{{Weather.current.humidity}}%</b></p>
+                <p>Precipitation: <b>{{Weather.current.precip_mm}} mm</b></p>
+                <p>Wind: <b>{{Weather.current.wind}} km/h</b></p>
+                <p>Visibility:<b>{{Weather.current.vis_km}} km</b></p>
+                <p>Wind direction by compass: <b>{{Weather.current.wind_dir}}</b></p>
+                <p>Wind direction in degree: <b>{{Weather.current.wind_degree}}</b></p>
               </div>
             </div>
             <div>
@@ -50,9 +50,9 @@
             </div>
           </b-col>
           <b-col>
-            <div class="flex-container">
-              <div>
-                <h4>Light and dark time of day:</h4>
+            <b-row>
+              <b-col style="padding-right: 0 !important;">
+                  <h4>Light and dark time of day:</h4>
                   <div class="flex-container">
                     <div class="day">
                       <p class="day_name">Light time of day:</p>
@@ -62,7 +62,7 @@
                           <component :is="SvgsDay[0].svg" class="sunMoonSvg"/>
                         </b-col>
                         <b-col>
-                          <p class="light conditions"><b> from {{Weather.current.sunMoon.start}} to {{Weather.current.sunMoon.end}}</b></p>
+                          <p class="sunMoon conditions"><b> from {{Weather.current.sunMoon.start}} to {{Weather.current.sunMoon.end}}</b></p>
                           <p class="conditions"><b>{{Weather.current.sunMoon.sun_phase}}</b></p>
                         </b-col>
                       </b-row>
@@ -75,45 +75,47 @@
                           <component :is="SvgsNight[0].svg" class="sunMoonSvg"/>
                         </b-col>
                         <b-col>
-                          <p class="light conditions"><b> from {{Weather.current.sunMoon.end}} to {{Weather.current.sunMoon.start}}</b></p>
+                          <p class="sunMoon conditions"><b> from {{Weather.current.sunMoon.end}} to {{Weather.current.sunMoon.start}}</b></p>
                           <p class="conditions"><b>{{Weather.current.sunMoon.moon_phase}}</b></p>
                         </b-col>
                       </b-row>
                     </div>
-                </div>
-              </div>
-              <div>
-                <h4>Coming days:</h4>
-                <div class="flex-container">
-                  <div class="day" v-for="(day, index) in Weather.days" :key="index">
-                    <b-row>
-                      <b-col>
-                        <h2>{{getDayOfTheWeek(index+1)}}</h2>
-                      </b-col>
-                      <b-col>
-                        <div class="today_time" >{{day.number}}</div>
-                      </b-col>
-                    </b-row>
-                    <hr/>
-                    <b-row>
-                      <b-col cols="5">
-                        <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>
-                      </b-col>
-                      <b-col>
-                        <div class="light">{{Math.round(day.minTemp)}}°   {{Math.round(day.maxTemp)}}°</div>
-                        <p class="conditions"><b>{{day.name}}</b></p>
-                      </b-col>
-                    </b-row>
+                  </div>
+              </b-col>
+              <b-col style="padding-left: 0 !important;">
+                <div>
+                  <h4>Coming days:</h4>
+                  <div class="flex-container">
+                    <div class="day" v-for="(day, index) in Weather.days" :key="index">
+                      <b-row>
+                        <b-col>
+                          <h2>{{getDayOfTheWeek(index+1)}}</h2>
+                        </b-col>
+                        <b-col>
+                          <div class="today_time" >{{day.number}}</div>
+                        </b-col>
+                      </b-row>
+                      <hr/>
+                      <b-row>
+                        <b-col cols="5">
+                          <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>
+                        </b-col>
+                        <b-col>
+                          <p class="light">{{Math.round(day.minTemp)}}°   {{Math.round(day.maxTemp)}}°</p>
+                          <p class="conditions"><b>{{day.name}}</b></p>
+                        </b-col>
+                      </b-row>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </b-col>
+            </b-row>
             <h4>Hourly forecast</h4>
             <div class="flex-container">
-              <div><WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
-              <div><WeatherChart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
-              <div><WeatherChart :chartOptions="chartOptions" :chartData="cloudDay" type="Line"/></div>
-              <div><WeatherChart :chartOptions="chartOptions" :chartData="humidityDay" type="Line"/></div>
+              <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
+              <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
+              <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="cloudDay" type="Line"/></div>
+              <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="humidityDay" type="Line"/></div>
             </div>
           </b-col>
         </b-row>
@@ -161,7 +163,7 @@ export default {
       tempDay: {
         labels: [],
         datasets: [
-          { label: 'Average temperature', data: [] },
+          { label: 'Temperature', data: [] },
           { label: 'Feels like temperature', data: [] }
         ]
       },
@@ -645,6 +647,11 @@ export default {
 </script>
 
 <style lang="scss">
+  .mainSvg{
+    width: 120%;
+    margin-top: -10%;
+    margin-left: -10%;
+  }
   h1{
     font-size: 2rem !important;
     margin-bottom: .5rem !important;
@@ -658,12 +665,12 @@ export default {
   }
   .sunMoonSvg{
     width: 285%;
-    margin: 45% auto 0 -45%;
+    margin: 30% auto 0 -45%;
     display: block;
   }
   .svgDayOfTheWeek{
     width: 185%;
-    margin: 45% auto 0 -15%;
+    margin: 30% auto 0 -15%;
     display: block;
   }
   .twentyFourHoursSvg{
@@ -700,7 +707,6 @@ export default {
   .today{
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
-    font-size: 1.4rem;
     text-align: left;
     color: black;
     padding: 15px;
@@ -714,12 +720,10 @@ export default {
     padding: 15px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   }
-  .today_time{
+  .today_time p{
     color: black;
     text-align: left;
-    font-size: 1.1rem;
     margin-bottom: 0;
-
   }
   hr{
     margin-top: 0rem !important;
@@ -741,7 +745,8 @@ export default {
     font-size: 2rem;
     line-height: 2rem;
     text-align: center;
-    margin-bottom: 5%;
+    margin-top: -8%;
+    margin-bottom: 0;
   }
   .city{
     font-size: 2rem;
@@ -759,13 +764,8 @@ export default {
     text-align: left;
     color: black;
   }
-  .line1{
+  .line{
     height: 125px;
-  }
-  .light, .dark{
-    height: 35px;
-    font-size: 1.6rem;
-    text-align: center;
   }
   .conditions{
     font-size: 0.85rem !important;
@@ -773,10 +773,12 @@ export default {
     text-align: center;
     margin-bottom: 0 !important;
   }
-  .dark{
-    margin-left: 20px;
-  }
   .light{
+    margin-top: 15%;
+    font-size: 1.5rem;
+    margin-bottom: 0 !important;
+  }
+  .sunMoon{
     margin-top: 25%;
   }
   .day{
@@ -790,7 +792,7 @@ export default {
       font-weight: 500;
       margin-bottom: 0 !important;
     }
-    .today_time{
+    .today_time p{
       font-size: .9rem
     }
   }
@@ -800,19 +802,18 @@ export default {
   .col, .col-3 {
     .flex-container > .day{
       width: 47%;
-      margin: 0 1% 0;
+      margin: 0 1% 7px;
     }
   }
   .col{
-    .flex-container > div{
-      width: 48%;
-      margin: 0 7px 7px;
+    .flex-container > .Line{
+      width: 47.8%;
+      margin: 0 8px 7px;
     }
   }
   .flex-container > .day{
     width: 15.16%;
     height: 125px;
-    //height: 29vh;
     margin: 0 0.75% 1%;
   }
   .flex-container > .dd{
@@ -823,7 +824,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
   }
-  .feels .flex-container > div{
+  .feels .flex-container > p{
     width: 100%;
     margin: 0;
   }
@@ -831,35 +832,6 @@ export default {
     padding: 0 3%;
   }
   @media screen and (min-width: 768px) and (max-width: 992px){
-    .today{
-      height: 65vh;
-    }
-    .flex-container > .day {
-      width: 48%;
-      height: 20.8vh;
-    }
-    .day hr{
-      margin-bottom: 15px !important;
-    }
-    h2{
-      font-size: 1.6rem !important;
-    }
-    .today_time,.number {
-      font-size: 1.2rem;
-    }
-    .now,.temp{
-      font-size: 2rem;
-    }
-    .day h2 {
-      font-size: 1.2rem !important;
-    }
-    .light, .dark {
-      width: 42px;
-      height: 38px;
-      font-size: 1.35rem;
-    }
-    .darkLight{
-      margin-left: -20px;
-    }
+
   }
 </style>
