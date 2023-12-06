@@ -122,8 +122,6 @@
                 <g>
 			        <g>
                         <radialGradient id="SVGID_00000074399985404336856130000017291388605559341483_" cx="-398.8215" cy="-117.7094" r="9.8909" gradientTransform="matrix(0.2734 0.129 -0.1579 0.2234 105.1667 102.2348)" gradientUnits="userSpaceOnUse">
-                            <stop  offset="0" style="stop-color:#D0F2FF"/>
-                            <stop  offset="0.198" style="stop-color:#D5F3FF"/>
                             <stop  offset="1" style="stop-color:#85BCF1"/>
                         </radialGradient>
                         <path style="fill:url(#SVGID_00000074399985404336856130000017291388605559341483_);" d="M16.4,24.7c-0.4,0.5-1.2,0.7-1.8,0.4 c-0.6-0.3-0.8-0.9-0.5-1.4c0.4-0.5,2.6-1.5,2.6-1.5S16.8,24.2,16.4,24.7z"/>
@@ -142,8 +140,6 @@
                     </g>
                     <g>
                         <radialGradient id="SVGID_00000116951481668205723110000004370814215416042650_" cx="-369.042" cy="-134.903" r="9.8913" gradientTransform="matrix(0.2734 0.129 -0.1579 0.2234 105.1667 102.2348)" gradientUnits="userSpaceOnUse">
-                            <stop  offset="0" style="stop-color:#D0F2FF"/>
-                            <stop  offset="0.198" style="stop-color:#D5F3FF"/>
                             <stop  offset="1" style="stop-color:#85BCF1"/>
                         </radialGradient>
                         <path style="fill:url(#SVGID_00000116951481668205723110000004370814215416042650_);" d="M27.3,24.7c-0.4,0.5-1.2,0.7-1.8,0.4 c-0.6-0.3-0.8-0.9-0.5-1.4c0.4-0.5,2.6-1.5,2.6-1.5S27.7,24.2,27.3,24.7z"/>
@@ -157,8 +153,6 @@
                 <g>
 			        <g>
 					    <radialGradient id="SVGID_00000062150869215869031680000017079447005344629686_" cx="-369.2638" cy="-118.0943" r="9.891" gradientTransform="matrix(0.2734 0.129 -0.1579 0.2234 105.1667 102.2348)" gradientUnits="userSpaceOnUse">
-					        <stop  offset="0" style="stop-color:#D0F2FF"/>
-                            <stop  offset="0.198" style="stop-color:#D5F3FF"/>
                             <stop  offset="1" style="stop-color:#85BCF1"/>
 				        </radialGradient>
                         <path style="fill:url(#SVGID_00000062150869215869031680000017079447005344629686_);" d="M24.6,28.5c-0.4,0.5-1.2,0.7-1.8,0.4 c-0.6-0.3-0.8-0.9-0.5-1.4c0.4-0.5,2.6-1.5,2.6-1.5S24.9,28,24.6,28.5z"/>

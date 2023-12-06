@@ -117,12 +117,6 @@
             </div>
           </b-col>
         </b-row>
-      <div  class="flex-container">
-        <component v-for="svg in SvgsDay" :is="svg.svg" class="dd"/>
-      </div>
-      <div  class="flex-container">
-        <component v-for="svg in SvgsNight" :is="svg.svg" class="dd"/>
-      </div>
       </b-container>
   </div>
 </template>
