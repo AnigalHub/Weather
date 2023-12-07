@@ -37,15 +37,13 @@
             </div>
             <div>
               <h4>Twenty-four hours:</h4>
-              <div class="feels">
-                <b-row>
-                  <b-col v-for="(day, index) in Weather.current.twentyFourHours" :key="index">
-                    <p><b>{{day.name}}</b></p>
-                    <component :key="index" :is="day.svg" class="twentyFourHoursSvg"/>
-                    <div class="twentyFourHoursTemp">{{Math.round(day.temp)}}°</div>
-                    <p class="conditions"><b>{{day.svgName}}</b></p>
-                  </b-col>
-                </b-row>
+              <div class="hours">
+                <div v-for="(day, index) in Weather.current.twentyFourHours" :key="index">
+                  <p><b>{{day.name}}</b></p>
+                  <component :key="index" :is="day.svg" class="twentyFourHoursSvg"/>
+                  <div class="twentyFourHoursTemp">{{Math.round(day.temp)}}°</div>
+                  <p class="conditions"><b>{{day.svgName}}</b></p>
+                </div>
               </div>
             </div>
           </b-col>
@@ -664,7 +662,7 @@ export default {
     margin-bottom: 0 !important;
   }
   .sunMoonSvg{
-    width: 285%;
+    width: 255%;
     margin: 30% auto 0 -45%;
     display: block;
   }
@@ -713,14 +711,14 @@ export default {
     margin-bottom: 7px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   }
-  .feels{
+  .feels, .hours{
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
     margin-bottom: 3%;
     padding: 15px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   }
-  .today_time p{
+  .today_time p, .today_time{
     color: black;
     text-align: left;
     margin-bottom: 0;
@@ -792,7 +790,7 @@ export default {
       font-weight: 500;
       margin-bottom: 0 !important;
     }
-    .today_time p{
+    .today_time p, .today_time{
       font-size: .9rem
     }
   }
@@ -820,18 +818,38 @@ export default {
     width: 15.16%;
     margin: 0 0.75% 1%;
   }
-  .flex-container{
+  .flex-container, .hours{
     display: flex;
     flex-wrap: wrap;
   }
-  .feels .flex-container > p{
+  .flex-container > p{
     width: 100%;
     margin: 0;
+  }
+  .hours > div{
+    width: 31%;
+    margin: 0 1%;
   }
   .col{
     padding: 0 3%;
   }
-  @media screen and (min-width: 768px) and (max-width: 992px){
 
+  @media screen and (min-width: 992px) and (max-width: 1200px){
+    .col .flex-container > .Line {
+      width: 47.5%;
+    }
+    .light {
+      font-size: 1.2rem;
+      margin-top: 25%;
+    }
+    .day h2 {
+      font-size: .9rem !important;
+    }
+    .svgDayOfTheWeek {
+      margin: 50% auto 0 -15%;
+    }
+    .sunMoonSvg {
+      margin: 70% auto 0 -45%;
+    }
   }
 </style>
