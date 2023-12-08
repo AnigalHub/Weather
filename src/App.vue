@@ -2,37 +2,41 @@
   <div id="app" :style="{background:Weather.current.background}">
     <b-container v-if="!loading">
         <h1>Weather Forecast</h1>
-        <b-row>
+        <b-row class="mainRow">
           <b-col cols="3">
 <!--            <div class="city">{{Weather.city}}</div>-->
-            <h4>Today:</h4>
-            <div class="today line">
-              <b-row>
-                <b-col cols="5">
-                  <component  :is="Weather.current.svg" class="mainSvg"/>
-                  <p class="temp">{{Math.round(Weather.current.temp)}}°</p>
-                  <p class="conditions"><b>{{Weather.current.name}}</b></p>
-                </b-col>
-                <b-col class="today_time">
-                  <p><b>{{date.toLocaleString('en-US', { weekday: 'long' })}}</b></p>
-                  <hr/>
-                  <p>{{date.toLocaleDateString()}}</p>
-                  <p>{{date.toLocaleTimeString().slice(0,-3)}}</p>
-                  <hr/>
-                  <p>Feels like: {{Math.round(Weather.current.feel)}}°</p>
-                </b-col>
-              </b-row>
+            <div>
+              <h4>Today:</h4>
+              <div class="today line">
+                <b-row>
+                  <b-col cols="5">
+                    <component  :is="Weather.current.svg" class="mainSvg"/>
+                    <p class="temp">{{Math.round(Weather.current.temp)}}°</p>
+                    <p class="conditions"><b>{{Weather.current.name}}</b></p>
+                  </b-col>
+                  <b-col class="today_time">
+                    <p><b>{{date.toLocaleString('en-US', { weekday: 'long' })}}</b></p>
+                    <hr/>
+                    <p>{{date.toLocaleDateString()}}</p>
+                    <p>{{date.toLocaleTimeString().slice(0,-3)}}</p>
+                    <hr/>
+                    <p>Feels like: {{Math.round(Weather.current.feel)}}°</p>
+                  </b-col>
+                </b-row>
+              </div>
             </div>
-            <h4>Detailed description:</h4>
-            <div class="feels">
-              <div class="number flex-container">
-                <p>Cloudy:<b>{{Weather.current.cloudy}}%</b></p>
-                <p>Humidity: <b>{{Weather.current.humidity}}%</b></p>
-                <p>Precipitation: <b>{{Weather.current.precip_mm}} mm</b></p>
-                <p>Wind: <b>{{Weather.current.wind}} km/h</b></p>
-                <p>Visibility:<b>{{Weather.current.vis_km}} km</b></p>
-                <p>Wind direction by compass: <b>{{Weather.current.wind_dir}}</b></p>
-                <p>Wind direction in degree: <b>{{Weather.current.wind_degree}}</b></p>
+            <div>
+              <h4>Detailed description:</h4>
+              <div class="feels">
+                <div class="number flex-container">
+                  <p>Cloudy:<b>{{Weather.current.cloudy}}%</b></p>
+                  <p>Humidity: <b>{{Weather.current.humidity}}%</b></p>
+                  <p>Precipitation: <b>{{Weather.current.precip_mm}} mm</b></p>
+                  <p>Wind: <b>{{Weather.current.wind}} km/h</b></p>
+                  <p>Visibility:<b>{{Weather.current.vis_km}} km</b></p>
+                  <p>Wind direction by compass: <b>{{Weather.current.wind_dir}}</b></p>
+                  <p>Wind direction in degree: <b>{{Weather.current.wind_degree}}</b></p>
+                </div>
               </div>
             </div>
             <div>
@@ -837,6 +841,36 @@ export default {
   @media screen and (min-width: 992px) and (max-width: 1200px){
     .col .flex-container > .Line {
       width: 47.5%;
+    }
+    .light {
+      font-size: 1.2rem;
+      margin-top: 25%;
+    }
+    .day h2 {
+      font-size: .9rem !important;
+    }
+    .svgDayOfTheWeek {
+      margin: 50% auto 0 -15%;
+    }
+    .sunMoonSvg {
+      margin: 70% auto 0 -45%;
+    }
+  }
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    .mainRow{
+      flex-direction: column;
+      .col-3{
+        display: flex;
+        max-width: 100%;
+        padding: 0 15px !important;
+        & > div{
+          width: 32%;
+          margin: 0 0.75% 1%;
+        }
+      }
+    }
+    .col .flex-container > .Line {
+      width: 47.4%;
     }
     .light {
       font-size: 1.2rem;
