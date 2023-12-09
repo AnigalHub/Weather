@@ -52,8 +52,8 @@
             </div>
           </b-col>
           <b-col>
-            <b-row>
-              <b-col style="padding-right: 0 !important;">
+            <b-row class="addRow">
+              <b-col>
                   <h4>Light and dark time of day:</h4>
                   <div class="flex-container">
                     <div class="day">
@@ -84,7 +84,7 @@
                     </div>
                   </div>
               </b-col>
-              <b-col style="padding-left: 0 !important;">
+              <b-col>
                 <div>
                   <h4>Coming days:</h4>
                   <div class="flex-container">
@@ -885,5 +885,111 @@ export default {
     .sunMoonSvg {
       margin: 70% auto 0 -45%;
     }
+  }
+  @media screen and (min-width: 500px) and (max-width: 768px){
+    .mainRow, .addRow{
+      flex-direction: column;
+      .col{
+        padding: 0 15px !important;
+      }
+      .col-3{
+        max-width: 100%;
+        padding: 0 30px !important;
+      }
+    }
+    .mainSvg {
+      width: 60%;
+      float: left;
+      display: block;
+      margin: 10% auto 0;
+    }
+    .temp{
+      margin-top: 15%;
+    }
+    .twentyFourHoursSvg {
+      width: 65%;
+      margin: -10% auto 5% -10%;
+    }
+    .col .flex-container > .day, .col-3 .flex-container > .day {
+      width: 48%;
+      margin: 0 1% 7px;
+    }
+    .col .flex-container > .Line {
+      width: 100%;
+    }
+    .light {
+      font-size: 1.2rem;
+      margin-top: 15%;
+    }
+    .day h2 {
+      font-size: .9rem !important;
+    }
+    .svgDayOfTheWeek {
+      width: 145%;
+      margin: 15% auto 0 auto;
+    }
+    .sunMoonSvg {
+      margin: 25% auto 0 auto;
+      width: 155%;
+    }
+    .sunMoon {
+      margin-top: 20%;
+    }
+
+  }
+  @media screen and (max-width: 500px){
+    .addRow{
+      padding: 0 15px;
+    }
+    .mainRow, .addRow{
+      flex-direction: column;
+      .col{
+        padding: 0 15px !important;
+      }
+      .col-3{
+        max-width: 100%;
+        padding: 0 30px !important;
+      }
+    }
+    .mainSvg {
+      width: 60%;
+      float: left;
+      display: block;
+      margin: 10% auto 0;
+    }
+    .temp{
+      margin-top: 15%;
+    }
+    .twentyFourHoursSvg {
+      width: 65%;
+      margin: -10% auto 5% -10%;
+    }
+    .col .flex-container > .day, .col-3 .flex-container > .day {
+      width: 48%;
+      margin: 0 1% 7px;
+    }
+    .col .flex-container > .Line {
+      width: 93%;
+      margin: 0 20px 7px;
+    }
+    .light {
+      font-size: 1.2rem;
+      margin-top: 15%;
+    }
+    .day h2 {
+      font-size: .9rem !important;
+    }
+    .svgDayOfTheWeek {
+      width: 145%;
+      margin: 15% auto 0 auto;
+    }
+    .sunMoonSvg {
+      margin: 25% auto 0 auto;
+      width: 155%;
+    }
+    .sunMoon {
+      margin-top: 20%;
+    }
+
   }
 </style>
