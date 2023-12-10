@@ -59,7 +59,7 @@
                     <div class="day">
                       <p class="day_name">Light time of day:</p>
                       <hr/>
-                      <b-row>
+                      <b-row class="darkLight">
                         <b-col cols="4">
                           <component :is="SvgsDay[0].svg" class="sunMoonSvg"/>
                         </b-col>
@@ -72,7 +72,7 @@
                     <div class="day">
                       <p class="day_name">Dark time of day:</p>
                       <hr/>
-                      <b-row>
+                      <b-row class="darkLight">
                         <b-col cols="4">
                           <component :is="SvgsNight[0].svg" class="sunMoonSvg"/>
                         </b-col>
@@ -98,7 +98,7 @@
                         </b-col>
                       </b-row>
                       <hr/>
-                      <b-row>
+                      <b-row class="darkLight">
                         <b-col cols="5">
                           <component :key="index" :is="day.svg" width="100%" class="svgDayOfTheWeek"/>
                         </b-col>
@@ -837,6 +837,12 @@ export default {
   .col{
     padding: 0 3%;
   }
+  .addRow .col:first-child{
+    padding-right: 0 !important;
+  }
+  .addRow .col:last-child{
+    padding-left: 0 !important;
+  }
 
   @media screen and (min-width: 992px) and (max-width: 1200px){
     .col .flex-container > .Line {
@@ -857,6 +863,9 @@ export default {
     }
   }
   @media screen and (min-width: 768px) and (max-width: 992px){
+    h1{
+      font-size: 1.5rem !important;
+    }
     .mainRow{
       flex-direction: column;
       .col-3{
@@ -887,10 +896,17 @@ export default {
     }
   }
   @media screen and (min-width: 500px) and (max-width: 768px){
+    h1{
+      font-size: 1.25rem !important;
+      margin-bottom: .25rem !important;
+    }
+    .row{
+      margin: 0 !important;
+    }
     .mainRow, .addRow{
       flex-direction: column;
       .col{
-        padding: 0 15px !important;
+        padding: 0 5px !important;
       }
       .col-3{
         max-width: 100%;
@@ -938,27 +954,34 @@ export default {
 
   }
   @media screen and (max-width: 500px){
+    h1{
+      font-size: 1.25rem !important;
+      margin-bottom: .25rem !important;
+      font-weight: 600 !important;
+    }
+    .row{
+      margin: 0 !important;
+    }
     .addRow{
       padding: 0 15px;
     }
-    .mainRow, .addRow{
+    .mainRow, .addRow, .darkLight{
       flex-direction: column;
       .col{
-        padding: 0 15px !important;
+        padding: 0 5px !important;
       }
-      .col-3{
+      .col-3,.col-4, .col-5{
         max-width: 100%;
         padding: 0 30px !important;
       }
     }
     .mainSvg {
-      width: 60%;
-      float: left;
+      width: 100%;
       display: block;
-      margin: 10% auto 0;
+      margin: 0 auto;
     }
     .temp{
-      margin-top: 15%;
+      margin-top: 0;
     }
     .twentyFourHoursSvg {
       width: 65%;
@@ -969,26 +992,23 @@ export default {
       margin: 0 1% 7px;
     }
     .col .flex-container > .Line {
-      width: 93%;
-      margin: 0 20px 7px;
+      width: 99%;
+      padding: 0 15px 7px 20px;
+      margin: 0;
     }
     .light {
       font-size: 1.2rem;
-      margin-top: 15%;
+      margin-top: -4%;
     }
     .day h2 {
       font-size: .9rem !important;
     }
-    .svgDayOfTheWeek {
-      width: 145%;
-      margin: 15% auto 0 auto;
-    }
-    .sunMoonSvg {
-      margin: 25% auto 0 auto;
-      width: 155%;
+    .sunMoonSvg, .svgDayOfTheWeek {
+      margin: 5% auto 0 auto;
+      width: 65%;
     }
     .sunMoon {
-      margin-top: 20%;
+      margin-top: 0;
     }
 
   }
