@@ -1,10 +1,9 @@
 <template>
   <div id="app" :style="{background:Weather.current.background}">
     <b-container v-if="!loading">
-        <h1>Weather Forecast</h1>
+      <h1 class="city">{{Weather.city}}</h1>
         <b-row class="mainRow">
           <b-col cols="3">
-<!--            <div class="city">{{Weather.city}}</div>-->
             <div>
               <h4>Today:</h4>
               <div class="today line">
@@ -754,12 +753,14 @@ export default {
     font-size: 2rem;
     line-height: 2rem;
     font-weight: 500;
+    text-align: center;
+    width: 24%;
+    margin: 0 auto 3%;
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
     color: black;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
-    padding: 12px 12px 6px;
-    margin-bottom: 3%;
+    padding: 6px 12px 6px;
   }
   .number{
     font-size: 1.03rem;
@@ -910,7 +911,7 @@ export default {
       }
       .col-3{
         max-width: 100%;
-        padding: 0 30px !important;
+        padding: 0 15px !important;
       }
     }
     .mainSvg {
@@ -954,6 +955,9 @@ export default {
 
   }
   @media screen and (max-width: 500px){
+    .city{
+      width: 50%;
+    }
     h1{
       font-size: 1.25rem !important;
       margin-bottom: .25rem !important;
@@ -972,7 +976,7 @@ export default {
       }
       .col-3,.col-4, .col-5{
         max-width: 100%;
-        padding: 0 30px !important;
+        padding: 0 15px !important;
       }
     }
     .mainSvg {
