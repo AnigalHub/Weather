@@ -164,8 +164,8 @@ export default {
       tempDay: {
         labels: [],
         datasets: [
-          { label: 'Temperature', data: [] },
-          { label: 'Feels like temperature', data: [] }
+          { backgroundColor:'rgb(133, 188, 241)', label: 'Temperature', data: [] },
+          { backgroundColor:'#7499b8', label: 'Feels like temperature', data: [] }
         ]
       },
       cloudHumidityDay:{
@@ -178,20 +178,20 @@ export default {
       rainSnowDay:{
         labels: [],
         datasets: [
-          { label: 'Chance of rain as percentage', data: [] },
-          { label: 'Chance of snow as percentage', data: [] }
+          { backgroundColor:'rgb(133, 188, 241)', label: 'Chance of rain as percentage', data: [] },
+          { backgroundColor:'#7499b8', label: 'Chance of snow as percentage', data: [] }
         ]
       },
       cloudDay: {
         labels: [],
         datasets: [
-          { label: 'Cloudy', data: [] }
+          { backgroundColor:'rgb(133, 188, 241)', label: 'Cloudy', data: [] }
         ]
       },
       humidityDay: {
         labels: [],
         datasets: [
-          { label: 'Humidity', data: [] }
+          { backgroundColor:'rgb(133, 188, 241)', label: 'Humidity', data: [] }
         ]
       },
       chartOptions: {
@@ -533,40 +533,38 @@ export default {
       this.Weather.current.wind_dir = current.wind_dir;
       this.Weather.current.wind_degree = current.wind_degree;
       this.Weather.current.cloudy = current.cloud;
-
-
-      for(let i=6; i < forecast.forecastday[0].hour.length; i=i+6){
-        let time = {};
-
-        time.temp = forecast.forecastday[0].hour[i].temp_c;
-        let times = forecast.forecastday[0].hour[i].time.substring(10).trim();
-
-        let code = forecast.forecastday[0].hour[i].condition.code;
-
-        if(times === '06:00' && i === 6){
-          time.name = 'Morning';
-          time.svg = this.putInSvg(0,code)[0];
-          time.svgName = this.putInSvg(0,code)[1];
-        }
-        if(times === '12:00' && i === 12){
-          time.name = 'Afternoon';
-          time.svg = this.putInSvg(0,code)[0];
-          time.svgName = this.putInSvg(0,code)[1];
-        }
-        if(times === '18:00' && i === 18){
-          time.name = 'Evening';
-          time.svg = this.putInSvg(1,code)[0];
-          time.svgName = this.putInSvg(1,code)[1];
-        }
-
-        this.Weather.current.twentyFourHours.push(time);
-      }
-
       this.Weather.current.sunMoon.start = forecast.forecastday[0].astro.sunrise.slice(0,-3);
       this.Weather.current.sunMoon.end = Number(forecast.forecastday[0].astro.sunset.slice(0,2))+12+':'+ forecast.forecastday[0].astro.sunset.slice(3,5);
       this.Weather.current.sunMoon.moon_phase = forecast.forecastday[0].astro.moon_phase.toLowerCase();
-      let array = []
+      let array = [];
+
       for(let i=0; i < forecast.forecastday[0].hour.length; i++){
+        let timeDay = {};
+
+        let times = forecast.forecastday[0].hour[i].time.substring(10).trim();
+        let code = forecast.forecastday[0].hour[i].condition.code;
+
+        if(times === '06:00' && i === 6){
+          timeDay.name = 'Morning';
+        }
+        if(times === '12:00' && i === 12){
+          timeDay.name = 'Afternoon';
+        }
+        if((times === '06:00' && i === 6) || (times === '12:00' && i === 12) ){
+          timeDay.temp = forecast.forecastday[0].hour[i].temp_c;
+          timeDay.svg = this.putInSvg(0,code)[0];
+          timeDay.svgName = this.putInSvg(0,code)[1];
+          this.Weather.current.twentyFourHours.push(timeDay);
+        }
+        if(times === '18:00' && i === 18){
+          timeDay.temp = forecast.forecastday[0].hour[i].temp_c;
+          timeDay.name = 'Evening';
+          timeDay.svg = this.putInSvg(1,code)[0];
+          timeDay.svgName = this.putInSvg(1,code)[1];
+          this.Weather.current.twentyFourHours.push(timeDay);
+        }
+
+
         array.push(forecast.forecastday[0].hour[i].condition.code);
         let time = (forecast.forecastday[0].hour[i].time).substring(10).trim();
         let temp_c = Math.round(forecast.forecastday[0].hour[i].temp_c);
@@ -575,32 +573,19 @@ export default {
         let chance_of_snow = Math.round(forecast.forecastday[0].hour[i].chance_of_snow);
         let cloud = forecast.forecastday[0].hour[i].cloud;
         let humidity = forecast.forecastday[0].hour[i].humidity;
-        
 
         this.tempDay.labels.push(time);
-        this.tempDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)';
         this.tempDay.datasets[0].data.push(temp_c);
-        this.tempDay.datasets[1].backgroundColor = '#7499b8';
         this.tempDay.datasets[1].data.push(feelslike_c);
 
-        this.cloudHumidityDay.labels.push(time);
-        this.cloudHumidityDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)';
-        this.cloudHumidityDay.datasets[0].data.push(cloud);
-        this.cloudHumidityDay.datasets[1].backgroundColor = '#7499b8';
-        this.cloudHumidityDay.datasets[1].data.push(humidity);
-
         this.rainSnowDay.labels.push(time);
-        this.rainSnowDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)';
         this.rainSnowDay.datasets[0].data.push(chance_of_rain);
-        this.rainSnowDay.datasets[1].backgroundColor = '#7499b8';
         this.rainSnowDay.datasets[1].data.push(chance_of_snow);
 
         this.cloudDay.labels.push(time);
-        this.cloudDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
         this.cloudDay.datasets[0].data.push(cloud);
 
         this.humidityDay.labels.push(time);
-        this.humidityDay.datasets[0].backgroundColor = 'rgb(133, 188, 241)'
         this.humidityDay.datasets[0].data.push(humidity);
         
       }
@@ -691,7 +676,7 @@ export default {
     background: linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%);
     min-height: 100vh;
     text-align: center;
-    padding: 20px 0;
+    padding: 0;
     font-family: 'Roboto Condensed', sans-serif;
   }
   .container{
@@ -809,6 +794,7 @@ export default {
     }
   }
   .col{
+    padding: 0 3%;
     .flex-container > .Line{
       width: 47.8%;
       margin: 0 8px 7px;
@@ -834,9 +820,6 @@ export default {
   .hours > div{
     width: 31%;
     margin: 0 1%;
-  }
-  .col{
-    padding: 0 3%;
   }
   .addRow .col:first-child{
     padding-right: 0 !important;
