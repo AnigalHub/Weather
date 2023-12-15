@@ -1,12 +1,12 @@
 <template>
-    <LineChart ref="chart" v-if="showChart && type === 'Line'"
-            :options="chartOptions"
-            :data="chartData"
-    />
-    <BarChart ref="chart" v-else-if="showChart && type === 'Bar'"
-               :options="chartOptions"
-               :data="chartData"
-    />
+        <LineChart ref="chart" v-if="showChart && type === 'Line' && localData"
+                   :options="chartOptions"
+                   :data="localData"
+        />
+        <BarChart ref="chart" v-else-if="showChart && type === 'Bar' && localData"
+                  :options="chartOptions"
+                  :data="localData"
+        />
 </template>
 
 <script>
@@ -51,7 +51,18 @@
         data()  {
             return {
                 showChart: false,
+                localData: null,
             }
+        },
+        watch: {
+            chartData:{
+                immediate: true,
+                handler(newVal, oldVal){
+                    console.log("watcher", {newVal, oldVal})
+                    this.localData = newVal;
+                },
+            },
+
         },
         created() {
             setTimeout(() => this.showChart = true, 100)
