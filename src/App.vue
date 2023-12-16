@@ -2,7 +2,12 @@
   <div id="app" :style="{background:Weather.current.background}">
     <b-container v-if="!loading">
       <h1 class="city">{{Weather.city}}</h1>
-        <b-row class="mainRow">
+      <select v-model="selected" @click="recalculateTheWeather()">
+        <option v-for="option in options" v-bind:value="option.text">
+          {{ option.text }}
+        </option>
+      </select>
+      <b-row class="mainRow">
           <b-col cols="3">
             <div>
               <h4>Today:</h4>
@@ -27,7 +32,7 @@
             <div>
               <h4>Detailed description:</h4>
               <div class="feels">
-                <div class="number flex-container">
+                <div class="flex-container">
                   <p>Cloudy:<b>{{Weather.current.cloudy}}%</b></p>
                   <p>Humidity: <b>{{Weather.current.humidity}}%</b></p>
                   <p>Precipitation: <b>{{Weather.current.precip_mm}} mm</b></p>
@@ -42,7 +47,7 @@
               <h4>Twenty-four hours:</h4>
               <div class="hours">
                 <div v-for="(day, index) in Weather.current.twentyFourHours" :key="index">
-                  <p><b>{{day.name}}</b></p>
+                  <p class="text-center"><b>{{day.name}}</b></p>
                   <component :key="index" :is="day.svg" class="twentyFourHoursSvg"/>
                   <div class="twentyFourHoursTemp">{{Math.round(day.temp)}}°</div>
                   <p class="conditions"><b>{{day.svgName}}</b></p>
@@ -113,6 +118,7 @@
             </b-row>
             <h4>Hourly forecast</h4>
             <div class="flex-container">
+              <br/>
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="cloudDay" type="Line"/></div>
@@ -120,7 +126,7 @@
             </div>
           </b-col>
         </b-row>
-      </b-container>
+    </b-container>
   </div>
 </template>
 
@@ -161,18 +167,17 @@ export default {
   data(){
     return{
       loading: true,
+      selected: 'Moscow',
+      options: [
+        { text: 'Moscow'},
+        { text: 'Ryazan'},
+        { text: 'Vladivostok' }
+      ],
       tempDay: {
         labels: [],
         datasets: [
           { backgroundColor:'rgb(133, 188, 241)', label: 'Temperature', data: [] },
           { backgroundColor:'#7499b8', label: 'Feels like temperature', data: [] }
-        ]
-      },
-      cloudHumidityDay:{
-        labels: [],
-        datasets: [
-          { label: 'Cloudy', data: [] },
-          { label: 'Humidity', data: [] }
         ]
       },
       rainSnowDay:{
@@ -491,18 +496,31 @@ export default {
     }
   },
   methods:{
+    async recalculateTheWeather(){
+      // TODO:
+      // Обработка ОШИБОК, потому что АПИ может не всегда работать и выдавать результат
+      // Может упасть сервис, может не пройти токен авторизации, может не быть интернета
+      let response  = await this.getWeather();
+
+      this.loading = false;
+      console.log('recalculateTheWeather', response.data);
+      this.getCurrentData(response.data);
+      this.getWeekData(response.data);
+      console.log('this.Weather', this.Weather);
+    },
     async getWeather(){
       const API_KEY = "b77f6d044b784ff99b1160139232111"
-      let q = 'Moscow';
+      let q = this.selected;
       let days = '3'
       let response = await axios.get(`http://api.weatherapi.com/v1/forecast.json`,
-              {
-                params: {
-                  key:API_KEY,
-                  q,
-                  days
-                }
-              });
+      {
+        params: {
+          key:API_KEY,
+          q,
+          days
+        }
+      });
+      console.log('response', { response })
       return response;
     },
     getDayMs(i){
@@ -518,8 +536,11 @@ export default {
       return new Date(day).toLocaleString('en-US', { weekday: 'long' });
     },
     getCurrentData(data){
+      //let {} = data;
       let current =  data.current;
       let forecast = data.forecast;
+      // TODO: Новый объект
+      //this.Weather = {}
       this.Weather.city = data.location.name;
       this.Weather.current.temp = current.temp_c;
       this.Weather.current.wind = current.wind_kph;
@@ -538,33 +559,59 @@ export default {
       this.Weather.current.sunMoon.moon_phase = forecast.forecastday[0].astro.moon_phase.toLowerCase();
       let array = [];
 
+      this.Weather.current.twentyFourHours = [];
+
+      this.tempDay = {
+        labels: [],
+        datasets: [
+            {backgroundColor:'rgb(133, 188, 241)', label: 'Temperature', data: []},
+            {backgroundColor:'#7499b8', label: 'Feels like temperature', data: []}
+          ]
+      };
+      this.rainSnowDay={
+        labels: [],
+                datasets: [
+          { backgroundColor:'rgb(133, 188, 241)', label: 'Chance of rain as percentage', data: [] },
+          { backgroundColor:'#7499b8', label: 'Chance of snow as percentage', data: [] }
+        ]
+      };
+      this.cloudDay= {
+        labels: [],
+                datasets: [
+          { backgroundColor:'rgb(133, 188, 241)', label: 'Cloudy', data: [] }
+        ]
+      };
+      this.humidityDay= {
+        labels: [],
+                datasets: [
+          { backgroundColor:'rgb(133, 188, 241)', label: 'Humidity', data: [] }
+        ]
+      };
+
       for(let i=0; i < forecast.forecastday[0].hour.length; i++){
         let timeDay = {};
-
-        let times = forecast.forecastday[0].hour[i].time.substring(10).trim();
         let code = forecast.forecastday[0].hour[i].condition.code;
 
-        if(times === '06:00' && i === 6){
+        if(i === 6){
           timeDay.name = 'Morning';
         }
-        if(times === '12:00' && i === 12){
+        if(i === 12){
           timeDay.name = 'Afternoon';
         }
-        if((times === '06:00' && i === 6) || (times === '12:00' && i === 12) ){
+        if(i === 6 || i === 12){
           timeDay.temp = forecast.forecastday[0].hour[i].temp_c;
           timeDay.svg = this.putInSvg(0,code)[0];
           timeDay.svgName = this.putInSvg(0,code)[1];
           this.Weather.current.twentyFourHours.push(timeDay);
         }
-        if(times === '18:00' && i === 18){
+        if(i === 18){
           timeDay.temp = forecast.forecastday[0].hour[i].temp_c;
           timeDay.name = 'Evening';
           timeDay.svg = this.putInSvg(1,code)[0];
           timeDay.svgName = this.putInSvg(1,code)[1];
           this.Weather.current.twentyFourHours.push(timeDay);
         }
-
-
+        // TODO: Новый объект
         array.push(forecast.forecastday[0].hour[i].condition.code);
         let time = (forecast.forecastday[0].hour[i].time).substring(10).trim();
         let temp_c = Math.round(forecast.forecastday[0].hour[i].temp_c);
@@ -590,7 +637,8 @@ export default {
         
       }
       let codeSvg = array.sort((a,b) => array.filter(v => v===a).length - array.filter(v => v===b).length).pop();
-      this.Weather.current.sunMoon.sun_phase = this.putInSvg(this.Weather.current.is_day,codeSvg)[1]
+      this.Weather.current.sunMoon.sun_phase = this.putInSvg(this.Weather.current.is_day,codeSvg)[1];
+      console.log('this.tempDay', this.tempDay)
     },
     putInSvg(is_day, codePicture){
       for(const i in this.IncomingPictures) {
@@ -606,6 +654,7 @@ export default {
     },
     getWeekData(data){
       let forecast = data.forecast;
+      this.Weather.days = [];
       for(let jj=1; jj < forecast.forecastday.length; jj++){
         let day = {};
         day.maxTemp = forecast.forecastday[jj].day.maxtemp_c;
@@ -615,12 +664,12 @@ export default {
         day.name = this.putInSvg(0,code)[1];
         day.number = new Date(this.getDayMs(jj)).toLocaleDateString();
         this.Weather.days.push(day);
-
       }
     },
   },
   async created() {
-    let response  = await this.getWeather()
+    let response  = await this.getWeather();
+
     this.loading = false;
     console.log('created', response.data);
     this.getCurrentData(response.data);
@@ -700,6 +749,7 @@ export default {
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   }
   .feels, .hours{
+    text-align: left;
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
     margin-bottom: 3%;
@@ -746,11 +796,6 @@ export default {
     color: black;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
     padding: 6px 12px 6px;
-  }
-  .number{
-    font-size: 1.03rem;
-    text-align: left;
-    color: black;
   }
   .line{
     height: 125px;
