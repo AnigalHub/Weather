@@ -536,30 +536,34 @@ export default {
       return new Date(day).toLocaleString('en-US', { weekday: 'long' });
     },
     getCurrentData(data){
-      //let {} = data;
-      let current =  data.current;
-      let forecast = data.forecast;
-      // TODO: Новый объект
-      //this.Weather = {}
-      this.Weather.city = data.location.name;
-      this.Weather.current.temp = current.temp_c;
-      this.Weather.current.wind = current.wind_kph;
-      this.Weather.current.vis_km = current.vis_km;
-      this.Weather.current.feel = current.feelslike_c;
-      this.Weather.current.humidity = current.humidity;
-      this.Weather.current.svg = this.putInSvg(this.Weather.current.is_day,current.condition.code)[0];
-      this.Weather.current.name = this.putInSvg(this.Weather.current.is_day,current.condition.code)[1];
-      this.Weather.current.background = this.putInSvg(this.Weather.current.is_day,current.condition.code)[2];
-      this.Weather.current.precip_mm = current.precip_mm;
-      this.Weather.current.wind_dir = current.wind_dir;
-      this.Weather.current.wind_degree = current.wind_degree;
-      this.Weather.current.cloudy = current.cloud;
-      this.Weather.current.sunMoon.start = forecast.forecastday[0].astro.sunrise.slice(0,-3);
-      this.Weather.current.sunMoon.end = Number(forecast.forecastday[0].astro.sunset.slice(0,2))+12+':'+ forecast.forecastday[0].astro.sunset.slice(3,5);
-      this.Weather.current.sunMoon.moon_phase = forecast.forecastday[0].astro.moon_phase.toLowerCase();
-      let array = [];
+      let {current, forecast } = data;
+      let currentForecast = forecast.forecastday[0]
 
-      this.Weather.current.twentyFourHours = [];
+      this.Weather = {
+        city: data.location.name,
+        current: {
+          temp: current.temp_c,
+          wind: current.wind_kph,
+          vis_km: current.vis_km,
+          feel:current.feelslike_c,
+          humidity: current.humidity,
+          svg: this.putInSvg(this.Weather.current.is_day,current.condition.code)[0],
+          name: this.putInSvg(this.Weather.current.is_day,current.condition.code)[1],
+          background: this.putInSvg(this.Weather.current.is_day,current.condition.code)[2],
+          precip_mm: current.precip_mm,
+          wind_dir: current.wind_dir,
+          wind_degree: current.wind_degree,
+          cloudy: current.cloud,
+          sunMoon: {
+            start: currentForecast.astro.sunrise.slice(0,-3),
+            end: Number(currentForecast.astro.sunset.slice(0,2))+12+':'+ currentForecast.astro.sunset.slice(3,5),
+            moon_phase: currentForecast.astro.moon_phase.toLowerCase(),
+          },
+          twentyFourHours: []
+        }
+      }
+
+      let array = [];
 
       this.tempDay = {
         labels: [],
@@ -588,9 +592,9 @@ export default {
         ]
       };
 
-      for(let i=0; i < forecast.forecastday[0].hour.length; i++){
+      for(let i=0; i < currentForecast.hour.length; i++){
         let timeDay = {};
-        let code = forecast.forecastday[0].hour[i].condition.code;
+        let code = currentForecast.hour[i].condition.code;
 
         if(i === 6){
           timeDay.name = 'Morning';
@@ -599,46 +603,45 @@ export default {
           timeDay.name = 'Afternoon';
         }
         if(i === 6 || i === 12){
-          timeDay.temp = forecast.forecastday[0].hour[i].temp_c;
+          timeDay.temp = currentForecast.hour[i].temp_c;
           timeDay.svg = this.putInSvg(0,code)[0];
           timeDay.svgName = this.putInSvg(0,code)[1];
           this.Weather.current.twentyFourHours.push(timeDay);
         }
         if(i === 18){
-          timeDay.temp = forecast.forecastday[0].hour[i].temp_c;
+          timeDay.temp = currentForecast.hour[i].temp_c;
           timeDay.name = 'Evening';
           timeDay.svg = this.putInSvg(1,code)[0];
           timeDay.svgName = this.putInSvg(1,code)[1];
           this.Weather.current.twentyFourHours.push(timeDay);
         }
         // TODO: Новый объект
-        array.push(forecast.forecastday[0].hour[i].condition.code);
-        let time = (forecast.forecastday[0].hour[i].time).substring(10).trim();
-        let temp_c = Math.round(forecast.forecastday[0].hour[i].temp_c);
-        let feelslike_c = Math.round(forecast.forecastday[0].hour[i].feelslike_c);
-        let chance_of_rain = Math.round(forecast.forecastday[0].hour[i].chance_of_rain);
-        let chance_of_snow = Math.round(forecast.forecastday[0].hour[i].chance_of_snow);
-        let cloud = forecast.forecastday[0].hour[i].cloud;
-        let humidity = forecast.forecastday[0].hour[i].humidity;
+        array.push(currentForecast.hour[i].condition.code);
+        let time = (currentForecast.hour[i].time).substring(10).trim();
 
         this.tempDay.labels.push(time);
+        let temp_c = Math.round(currentForecast.hour[i].temp_c);
         this.tempDay.datasets[0].data.push(temp_c);
+        let feelslike_c = Math.round(currentForecast.hour[i].feelslike_c);
         this.tempDay.datasets[1].data.push(feelslike_c);
 
         this.rainSnowDay.labels.push(time);
+        let chance_of_rain = Math.round(currentForecast.hour[i].chance_of_rain);
         this.rainSnowDay.datasets[0].data.push(chance_of_rain);
+        let chance_of_snow = Math.round(currentForecast.hour[i].chance_of_snow);
         this.rainSnowDay.datasets[1].data.push(chance_of_snow);
 
         this.cloudDay.labels.push(time);
+        let cloud = currentForecast.hour[i].cloud;
         this.cloudDay.datasets[0].data.push(cloud);
 
         this.humidityDay.labels.push(time);
+        let humidity = currentForecast.hour[i].humidity;
         this.humidityDay.datasets[0].data.push(humidity);
         
       }
       let codeSvg = array.sort((a,b) => array.filter(v => v===a).length - array.filter(v => v===b).length).pop();
       this.Weather.current.sunMoon.sun_phase = this.putInSvg(this.Weather.current.is_day,codeSvg)[1];
-      console.log('this.tempDay', this.tempDay)
     },
     putInSvg(is_day, codePicture){
       for(const i in this.IncomingPictures) {
@@ -656,10 +659,10 @@ export default {
       let forecast = data.forecast;
       this.Weather.days = [];
       for(let jj=1; jj < forecast.forecastday.length; jj++){
+        let code = forecast.forecastday[jj].day.condition.code;
         let day = {};
         day.maxTemp = forecast.forecastday[jj].day.maxtemp_c;
         day.minTemp = forecast.forecastday[jj].day.mintemp_c;
-        let code = forecast.forecastday[jj].day.condition.code;
         day.svg = this.putInSvg(0,code)[0];
         day.name = this.putInSvg(0,code)[1];
         day.number = new Date(this.getDayMs(jj)).toLocaleDateString();
