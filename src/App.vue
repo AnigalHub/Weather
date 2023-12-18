@@ -33,7 +33,7 @@
               <h4>Detailed description:</h4>
               <div class="feels">
                 <div class="flex-container">
-                  <p>Cloudy:<b>{{Weather.current.cloudy}}%</b></p>
+                  <p>Cloudy: <b>{{Weather.current.cloudy}}%</b></p>
                   <p>Humidity: <b>{{Weather.current.humidity}}%</b></p>
                   <p>Precipitation: <b>{{Weather.current.precip_mm}} mm</b></p>
                   <p>Wind: <b>{{Weather.current.wind}} km/h</b></p>
@@ -118,7 +118,6 @@
             </b-row>
             <h4>Hourly forecast</h4>
             <div class="flex-container">
-              <br/>
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="cloudDay" type="Line"/></div>
@@ -159,7 +158,6 @@
   import overcast from "@/components/icons/overcast";
   import fog from "@/components/icons/fog";
   import WeatherChart from "@/components/WeatherChart"
-
 
 export default {
   name: 'App',
@@ -501,12 +499,9 @@ export default {
       // Обработка ОШИБОК, потому что АПИ может не всегда работать и выдавать результат
       // Может упасть сервис, может не пройти токен авторизации, может не быть интернета
       let response  = await this.getWeather();
-
       this.loading = false;
-      console.log('recalculateTheWeather', response.data);
       this.getCurrentData(response.data);
       this.getWeekData(response.data);
-      console.log('this.Weather', this.Weather);
     },
     async getWeather(){
       const API_KEY = "b77f6d044b784ff99b1160139232111"
@@ -658,26 +653,22 @@ export default {
     getWeekData(data){
       let forecast = data.forecast;
       this.Weather.days = [];
-      for(let jj=1; jj < forecast.forecastday.length; jj++){
-        let code = forecast.forecastday[jj].day.condition.code;
-        let day = {};
-        day.maxTemp = forecast.forecastday[jj].day.maxtemp_c;
-        day.minTemp = forecast.forecastday[jj].day.mintemp_c;
-        day.svg = this.putInSvg(0,code)[0];
-        day.name = this.putInSvg(0,code)[1];
-        day.number = new Date(this.getDayMs(jj)).toLocaleDateString();
+      let forecastdays = forecast.forecastday;
+      for(let jj=1; jj < forecastdays.length; jj++){
+        let code = forecastdays[jj].day.condition.code;
+        let day = {
+          maxTemp: forecastdays[jj].day.maxtemp_c,
+          minTemp: forecastdays[jj].day.mintemp_c,
+          svg: this.putInSvg(0,code)[0],
+          name: this.putInSvg(0,code)[1],
+          number: new Date(this.getDayMs(jj)).toLocaleDateString(),
+        };
         this.Weather.days.push(day);
       }
     },
   },
   async created() {
-    let response  = await this.getWeather();
-
-    this.loading = false;
-    console.log('created', response.data);
-    this.getCurrentData(response.data);
-    this.getWeekData(response.data);
-    console.log('this.Weather', this.Weather);
+    await this.recalculateTheWeather()
   },
 
 
