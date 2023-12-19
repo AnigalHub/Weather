@@ -1,6 +1,6 @@
 <template>
   <div id="app" :style="{ background: Weather.current.background }">
-    <b-container v-if="loading">
+    <b-container v-if="loaded">
       <div class="city">
         <span>Choose one of the options: </span>
         <select v-model="selected" @click="recalculateTheWeather()">
@@ -178,7 +178,7 @@
     data() {
       return {
         svgError: error,
-        loading: true,
+        loaded: false,
         selected: 'Moscow',
         options: ['Moscow', 'Kolomna', 'Ryazan', 'Ryazhsk', 'Vladimir'],
         tempDay: {
@@ -488,14 +488,16 @@
       };
     },
     async created() {
-      await this.recalculateTheWeather();
+      if(process.env.VUE_APP_API_KEY){
+        await this.recalculateTheWeather();
+      }
     },
     methods: {
       /** Подсчет погоды на все дни */
       async recalculateTheWeather() {
         const response = await this.getWeather();
         if (response.status !== 200) {
-          this.loading = false;
+          this.loaded = true;
         }
         this.getCurrentData(response.data);
         this.getWeekData(response.data);
@@ -503,7 +505,7 @@
       /** Получение погоды */
       async getWeather() {
         try{
-          const API_KEY = 'b77f6d044b784ff99b1160139232111';
+          const API_KEY = process.env.VUE_APP_API_KEY;
           const q = this.selected;
           const days = '3';
           const response = await axios.get(
