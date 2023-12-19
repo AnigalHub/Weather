@@ -218,278 +218,242 @@ export default {
       SvgsDay:[
         {
           name:'sunny',
-          svg:sunny,
-          desk:'Солнечно',
-          background:'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, #fff3d0 44.9%, #eaf7fc 96.1%)',
+          svg: sunny,
+          desk: 'Солнечно',
+          background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, #fff3d0 44.9%, #eaf7fc 96.1%)',
         },
         {
-          name:'partly cloudy',
+          name: 'partly cloudy',
           svg: partlyCloudy,
-          desk:'Переменная облачность',
+          desk: 'Переменная облачность',
           background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, rgb(200, 223, 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
-          name:'variable rain and snow',
+          name: 'variable rain and snow',
           svg: partlyRainingAndSnowing,
-          desk:'Переменный дождь и снег',
+          desk: 'Переменный дождь и снег',
           background: 'linear-gradient(179.1deg, #add2f5 -1.9%, #D5F3FF 44.9%, #ffe971 96.1%)'
         },
         {
-          name:'variable rain',
+          name: 'variable rain',
           svg: partlyRaining,
-          desk:'Переменный дождь',
+          desk: 'Переменный дождь',
           background: 'linear-gradient(179.1deg, rgb(254, 213, 102) -1.9%, rgb(200 223 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
-          name:'variable snow',
+          name: 'variable snow',
           svg: partlySnowing,
-          desk:'Переменный снег',
-          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #f3ece3 96.1%)'
+          desk: 'Переменный снег',
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #f3ece3 96.1%)'
         },
         {
-          name:'drizzling rain',
-          svg:drizzlingRain,
-          desk:'Моросящий дождь',
-          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
+          name: 'drizzling rain',
+          svg: drizzlingRain,
+          desk: 'Моросящий дождь',
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'rain',
-          svg:rain,
-          desk:'Дождь',
-          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
+          name: 'rain',
+          svg: rain,
+          desk: 'Дождь',
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'cloudy',
-          svg:cloudy,
-          desk:'Облачно',
-          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #bedfec 44.9%, #eaf7fc 96.1%)'
+          name: 'cloudy',
+          svg: cloudy,
+          desk: 'Облачно',
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #bedfec 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'drizzling snow',
-          svg:drizzlingSnow,
-          desk:'Моросящий снег',
-          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+          name: 'drizzling snow',
+          svg: drizzlingSnow,
+          desk: 'Моросящий снег',
+          background: 'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
-          name:'snowy',
-          svg:snowy,
-          desk:'Снежно',
-          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+          name: 'snowy',
+          svg: snowy,
+          desk: 'Снежно',
+          background: 'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
-          name:'drizzling rain and snow',
-          svg:drizzlingRainAndSnow,
-          desk:'Моросящий дождь и снег',
-          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+          name: 'drizzling rain and snow',
+          svg: drizzlingRainAndSnow,
+          desk: 'Моросящий дождь и снег',
+          background: 'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
-          name:'rain and snow',
-          svg:rainAndSnow,
-          desk:'Дождь и снег',
-          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+          name: 'rain and snow',
+          svg: rainAndSnow,
+          desk: 'Дождь и снег',
+          background: 'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
-          name:'storm',
-          svg:storm,
-          desk:'Гроза',
+          name: 'storm',
+          svg: storm,
+          desk: 'Гроза',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'sunnyStorm',
-          svg:sunnyStorm,
-          desk:'Гроза и солнце',
+          name: 'sunny and storm',
+          svg: sunnyStorm,
+          desk: 'Гроза и солнце',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #dedbd1 96.1%)'
         },
         {
-          name:'snowStorm',
-          svg:snowStorm,
-          desk:'Гроза и снег',
+          name:'snow and storm',
+          svg: snowStorm,
+          desk: 'Гроза и снег',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'sunnySnowStorm',
-          svg:sunnySnowStorm,
-          desk:'Гроза, солнце и снег',
+          name: 'sunny, snow and storm',
+          svg: sunnySnowStorm,
+          desk: 'Гроза, солнце и снег',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'overcast',
-          svg:overcast,
-          desk:'Пасмурно',
+          name: 'overcast',
+          svg: overcast,
+          desk: 'Пасмурно',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'blizzard',
-          svg:fog,
-          desk:'Метель',
+          name: 'blizzard',
+          svg: fog,
+          desk: 'Метель',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
       ],
       SvgsNight:[
         {
-          name:'sunny',
-          svg:moon,
-          desk:'Солнечно',
-          background:'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, #fff3d0 44.9%, #eaf7fc 96.1%)',
+          name: 'moon',
+          svg: moon,
+          desk: 'Солнечно',
+          background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, #fff3d0 44.9%, #eaf7fc 96.1%)',
         },
         {
-          name:'partly cloudy',
+          name: 'partly cloudy',
           svg: partlyCloudyMoon,
-          desk:'Переменная облачность',
+          desk: 'Переменная облачность',
           background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, rgb(200, 223, 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
-          name:'variable rain and snow',
+          name: 'variable rain and snow',
           svg: partlyRainingAndSnowingMoon,
-          desk:'Переменный дождь и снег',
+          desk: 'Переменный дождь и снег',
           background: 'linear-gradient(179.1deg, #add2f5 -1.9%, #D5F3FF 44.9%, #ffe971 96.1%)'
         },
         {
-          name:'variable rain',
+          name: 'variable rain',
           svg: partlyRainingMoon,
-          desk:'Переменный дождь',
+          desk: 'Переменный дождь',
           background: 'linear-gradient(179.1deg, rgb(254, 213, 102) -1.9%, rgb(200 223 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
-          name:'variable snow',
+          name: 'variable snow',
           svg: partlySnowingMoon,
-          desk:'Переменный снег',
-          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #f3ece3 96.1%)'
+          desk: 'Переменный снег',
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #f3ece3 96.1%)'
         },
         {
-          name:'drizzling rain',
-          svg:drizzlingRain,
-          desk:'Моросящий дождь',
-          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
+          name: 'drizzling rain',
+          svg: drizzlingRain,
+          desk: 'Моросящий дождь',
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'rain',
-          svg:rain,
-          desk:'Дождь',
-          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
+          name: 'rain',
+          svg: rain,
+          desk: 'Дождь',
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'cloudy',
-          svg:cloudy,
-          desk:'Облачно',
-          background:'linear-gradient(179.1deg, #85BCF1 -1.9%, #bedfec 44.9%, #eaf7fc 96.1%)'
+          name: 'cloudy',
+          svg: cloudy,
+          desk: 'Облачно',
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #bedfec 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'drizzling snow',
-          svg:drizzlingSnow,
-          desk:'Моросящий снег',
-          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+          name: 'drizzling snow',
+          svg: drizzlingSnow,
+          desk: 'Моросящий снег',
+          background: 'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
-          name:'snowy',
-          svg:snowy,
-          desk:'Снежно',
-          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+          name: 'snowy',
+          svg: snowy,
+          desk: 'Снежно',
+          background: 'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
-          name:'drizzling rain and snow',
-          svg:drizzlingRainAndSnow,
-          desk:'Моросящий дождь и снег',
-          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+          name: 'drizzling rain and snow',
+          svg: drizzlingRainAndSnow,
+          desk: 'Моросящий дождь и снег',
+          background: 'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
-          name:'rain and snow',
-          svg:rainAndSnow,
-          desk:'Дождь и снег',
-          background:'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
+          name: 'rain and snow',
+          svg: rainAndSnow,
+          desk: 'Дождь и снег',
+          background: 'linear-gradient(179.1deg, #b2bcc5 -1.9%, #bedfec 44.9%, #f9fafa 96.1%)'
         },
         {
-          name:'storm',
-          svg:storm,
-          desk:'Гроза',
+          name: 'storm',
+          svg: storm,
+          desk: 'Гроза',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'sunnyStorm',
-          svg:moonStorm,
-          desk:'Гроза и луна',
+          name: 'moon and storm',
+          svg: moonStorm,
+          desk: 'Гроза и луна',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #dedbd1 96.1%)'
         },
         {
-          name:'snowStorm',
-          svg:snowStorm,
-          desk:'Гроза и снег',
+          name: 'snow and storm',
+          svg: snowStorm,
+          desk: 'Гроза и снег',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'sunnySnowStorm',
-          svg:moonSnowStorm,
-          desk:'Гроза, луна и снег',
+          name: 'moon, snow and storm',
+          svg: moonSnowStorm,
+          desk: 'Гроза, луна и снег',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'overcast',
-          svg:overcast,
-          desk:'Пасмурно',
+          name: 'overcast',
+          svg: overcast,
+          desk: 'Пасмурно',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
         {
-          name:'blizzard',
-          svg:fog,
-          desk:'Метель',
+          name: 'blizzard',
+          svg: fog,
+          desk: 'Метель',
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
       ],
       IncomingPictures:[
-        {
-          codes:[1000]
-        },
-        {
-          codes:[1003]
-        },
-        {
-          codes:[1069,1252]
-        },
-        {
-          codes:[1063, 1192, 1243, 1246]
-        },
-        {
-          codes:[1066, 1255, 1258, 1261, 1264]
-        },
-        {
-          codes:[1150, 1153, 1180, 1183, 1186, 1189, 1240]
-        },
-        {
-          codes:[1072, 1171, 1195]
-        },
-        {
-          codes:[1006]
-        },
-        {
-          codes:[1114, 1117, 1168, 1204,1210, 1213, 1216, 1219]
-        },
-        {
-          codes:[1207, 1222, 1225]
-        },
-        {
-          codes:[1198, 1237]
-        },
-        {
-          codes:[1201, 1249]
-        },
-        {
-          codes:[1276]
-        },
-        {
-          codes:[1087, 1273]
-        },
-        {
-          codes:[1282]
-        },
-        {
-          codes:[1279]
-        },
-        {
-          codes:[1009]
-        },
-        {
-          codes:[1030, 1135, 1147]
-        },
+        {codes:[1000]},
+        {codes:[1003]},
+        {codes:[1069,1252]},
+        {codes:[1063, 1192, 1243, 1246]},
+        {codes:[1066, 1255, 1258, 1261, 1264]},
+        {codes:[1150, 1153, 1180, 1183, 1186, 1189, 1240]},
+        {codes:[1072, 1171, 1195]},
+        {codes:[1006]},
+        {codes:[1114, 1117, 1168, 1204,1210, 1213, 1216, 1219]},
+        {codes:[1207, 1222, 1225]},
+        {codes:[1198, 1237]},
+        {codes:[1201, 1249]},
+        {codes:[1276]},
+        {codes:[1087, 1273]},
+        {codes:[1282]},
+        {codes:[1279]},
+        {codes:[1009]},
+        {codes:[1030, 1135, 1147]},
       ]
     }
   },
