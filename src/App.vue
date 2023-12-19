@@ -1,7 +1,8 @@
 <template>
   <div id="app" :style="{ background: Weather.current.background }">
     <b-container v-if="loaded">
-      <div class="city">
+      <b-overlay :show="loading">
+        <div class="city">
         <span>Choose one of the options: </span>
         <select v-model="selected" @change="recalculateTheWeather()">
           <option v-for="(option, index) in options" :key="index">
@@ -130,6 +131,8 @@
           </div>
         </b-col>
       </b-row>
+
+      </b-overlay>
     </b-container>
     <b-container v-else class="container_error">
       <div class="error">
@@ -179,6 +182,7 @@
       return {
         svgError: error,
         loaded: false,
+        loading: false,
         selected: 'Moscow',
         options: ['Moscow', 'Kolomna', 'Ryazan', 'Ryazhsk', 'Vladimir'],
         tempDay: {
@@ -505,6 +509,7 @@
       /** Получение погоды */
       async getWeather() {
         try{
+          this.loading = true;
           const API_KEY = process.env.VUE_APP_API_KEY;
           const q = this.selected;
           const days = '3';
@@ -522,6 +527,8 @@
         }
         catch (error) {
           console.log('Error:', error)
+        } finally{
+          this.loading = false;
         }
       },
       /** Подсчет миллисекунд дня */
