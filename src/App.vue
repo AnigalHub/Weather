@@ -3,7 +3,7 @@
     <b-container v-if="loaded">
       <div class="city">
         <span>Choose one of the options: </span>
-        <select v-model="selected" @click="recalculateTheWeather()">
+        <select v-model="selected" @change="recalculateTheWeather()">
           <option v-for="(option, index) in options" :key="index">
             {{ option }}
           </option>
@@ -489,6 +489,7 @@
     },
     async created() {
       if(process.env.VUE_APP_API_KEY){
+        this.loaded = true;
         await this.recalculateTheWeather();
       }
     },
@@ -496,9 +497,8 @@
       /** Подсчет погоды на все дни */
       async recalculateTheWeather() {
         const response = await this.getWeather();
-        if (response.status !== 200) {
-          this.loaded = true;
-        }
+        if(!response)
+          return
         this.getCurrentData(response.data);
         this.getWeekData(response.data);
       },
