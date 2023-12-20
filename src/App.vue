@@ -1,12 +1,14 @@
 <template>
   <div id="app" :style="{background:Weather.current.background}">
     <b-container v-if="!loading">
-      <h1 class="city">{{Weather.city}}</h1>
-      <select v-model="selected" @click="recalculateTheWeather()">
+      <div class="city">
+        <span>Choose one of the options: </span>
+        <select v-model="selected" @click="recalculateTheWeather()">
         <option v-for="option in options" v-bind:value="option.text">
           {{ option.text }}
         </option>
       </select>
+      </div>
       <b-row class="mainRow">
           <b-col cols="3">
             <div>
@@ -168,8 +170,12 @@ export default {
       selected: 'Moscow',
       options: [
         { text: 'Moscow'},
+        { text: 'Kolomna' },
         { text: 'Ryazan'},
-        { text: 'Vladivostok' }
+        { text: 'Ryazhsk'},
+        { text: 'Vladimir'},
+        { text: 'Gus-Khrustalny' },
+        { text: 'Pereslavl-Zalessky' },
       ],
       tempDay: {
         labels: [],
@@ -645,10 +651,6 @@ export default {
     margin-top: -10%;
     margin-left: -10%;
   }
-  h1{
-    font-size: 2rem !important;
-    margin-bottom: .5rem !important;
-  }
   h4{
     font-size: 1.2rem !important;
   }
@@ -674,10 +676,6 @@ export default {
     font-size: 1.6rem;
     text-align: center;
     margin-top: -10%;
-  }
-  h1{
-    margin-bottom: 1rem !important;
-    text-shadow: 1.5px 1.5px 1.5px #f3e0e0;
   }
   #app {
     background: linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%);
@@ -742,12 +740,22 @@ export default {
     margin-top: -8%;
     margin-bottom: 0;
   }
+  select{
+    background: transparent !important;
+    border: none !important;
+  }
+  select:focus {
+    outline: none;
+  }
+  option{
+    background-color: rgba(255, 255, 255, 0.66) !important;
+  }
   .city{
-    font-size: 2rem;
+    font-size: 1.5rem;
     line-height: 2rem;
     font-weight: 500;
     text-align: center;
-    width: 24%;
+    width: 45%;
     margin: 0 auto 3%;
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
@@ -832,6 +840,10 @@ export default {
   }
 
   @media screen and (min-width: 992px) and (max-width: 1200px){
+    .city{
+      width: 40%;
+      font-size: 1.2rem;
+    }
     .col .flex-container > .Line {
       width: 47.5%;
     }
@@ -850,8 +862,9 @@ export default {
     }
   }
   @media screen and (min-width: 768px) and (max-width: 992px){
-    h1{
-      font-size: 1.5rem !important;
+    .city{
+      width: 55%;
+      font-size: 1.2rem;
     }
     .mainRow{
       flex-direction: column;
@@ -883,9 +896,9 @@ export default {
     }
   }
   @media screen and (min-width: 500px) and (max-width: 768px){
-    h1{
-      font-size: 1.25rem !important;
-      margin-bottom: .25rem !important;
+    .city{
+      width: 93%;
+      font-size: 1.2rem;
     }
     .row{
       margin: 0 !important;
@@ -942,12 +955,8 @@ export default {
   }
   @media screen and (max-width: 500px){
     .city{
-      width: 50%;
-    }
-    h1{
-      font-size: 1.25rem !important;
-      margin-bottom: .25rem !important;
-      font-weight: 600 !important;
+      width: 93%;
+      font-size: 1.2rem;
     }
     .row{
       margin: 0 !important;
@@ -966,16 +975,16 @@ export default {
       }
     }
     .mainSvg {
-      width: 100%;
+      width: 80%;
       display: block;
-      margin: 0 auto;
+      margin: -10% auto 0;
     }
     .temp{
       margin-top: 0;
     }
     .twentyFourHoursSvg {
       width: 65%;
-      margin: -10% auto 5% -10%;
+      margin:  -10% auto 5% 20%;
     }
     .col .flex-container > .day, .col-3 .flex-container > .day {
       width: 48%;
