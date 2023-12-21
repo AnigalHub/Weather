@@ -174,8 +174,6 @@ export default {
         { text: 'Ryazan'},
         { text: 'Ryazhsk'},
         { text: 'Vladimir'},
-        { text: 'Gus-Khrustalny' },
-        { text: 'Pereslavl-Zalessky' },
       ],
       tempDay: {
         labels: [],
@@ -501,7 +499,7 @@ export default {
       return new Date(day).toLocaleString('en-US', { weekday: 'long' });
     },
     getCurrentData(data){
-      let {current, forecast } = data;
+      let { current, forecast } = data;
       let currentForecast = forecast.forecastday[0]
 
       this.Weather = {
@@ -533,26 +531,26 @@ export default {
       this.tempDay = {
         labels: [],
         datasets: [
-            {backgroundColor:'rgb(133, 188, 241)', label: 'Temperature', data: []},
-            {backgroundColor:'#7499b8', label: 'Feels like temperature', data: []}
-          ]
+          {backgroundColor:'rgb(133, 188, 241)', label: 'Temperature', data: []},
+          {backgroundColor:'#7499b8', label: 'Feels like temperature', data: []}
+        ]
       };
       this.rainSnowDay={
         labels: [],
-                datasets: [
+        datasets: [
           { backgroundColor:'rgb(133, 188, 241)', label: 'Chance of rain as percentage', data: [] },
           { backgroundColor:'#7499b8', label: 'Chance of snow as percentage', data: [] }
         ]
       };
       this.cloudDay= {
         labels: [],
-                datasets: [
+        datasets: [
           { backgroundColor:'rgb(133, 188, 241)', label: 'Cloudy', data: [] }
         ]
       };
       this.humidityDay= {
         labels: [],
-                datasets: [
+        datasets: [
           { backgroundColor:'rgb(133, 188, 241)', label: 'Humidity', data: [] }
         ]
       };
@@ -561,26 +559,25 @@ export default {
         let timeDay = {};
         let code = currentForecast.hour[i].condition.code;
 
-        if(i === 6){
-          timeDay.name = 'Morning';
-        }
-        if(i === 12){
-          timeDay.name = 'Afternoon';
-        }
         if(i === 6 || i === 12){
-          timeDay.temp = currentForecast.hour[i].temp_c;
-          timeDay.svg = this.putInSvg(0,code)[0];
-          timeDay.svgName = this.putInSvg(0,code)[1];
+          timeDay = {
+            temp: currentForecast.hour[i].temp_c,
+            name:i === 6 ? 'Morning' : 'Afternoon',
+            svg: this.putInSvg(0,code)[0],
+            svgName: this.putInSvg(0,code)[1],
+          }
           this.Weather.current.twentyFourHours.push(timeDay);
         }
         if(i === 18){
-          timeDay.temp = currentForecast.hour[i].temp_c;
-          timeDay.name = 'Evening';
-          timeDay.svg = this.putInSvg(1,code)[0];
-          timeDay.svgName = this.putInSvg(1,code)[1];
+          timeDay = {
+            temp: currentForecast.hour[i].temp_c,
+            name: 'Evening',
+            svg: this.putInSvg(1,code)[0],
+            svgName: this.putInSvg(1,code)[1],
+          }
           this.Weather.current.twentyFourHours.push(timeDay);
         }
-        // TODO: Новый объект
+
         array.push(currentForecast.hour[i].condition.code);
         let time = (currentForecast.hour[i].time).substring(10).trim();
 
