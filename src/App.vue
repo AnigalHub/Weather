@@ -333,32 +333,32 @@ export default {
         {
           name: 'moon',
           svg: moon,
-          desk: 'Солнечно',
-          background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, #fff3d0 44.9%, #eaf7fc 96.1%)',
+          desk: 'Лунно',
+          background: 'linear-gradient(179.1deg, rgb(178, 188, 197) -1.9%, rgb(176 186 189) 44.9%, rgb(249, 250, 250) 96.1%)',
         },
         {
           name: 'partly cloudy',
           svg: partlyCloudyMoon,
           desk: 'Переменная облачность',
-          background: 'linear-gradient(179.1deg, rgb(254 236 162) -1.9%, rgb(200, 223, 244) 44.9%, rgb(234, 247, 252) 96.1%)'
+          background: 'linear-gradient(179.1deg, #add2f5 -1.9%, #D5F3FF 44.9%, rgb(178, 188, 197) 96.1%)'
         },
         {
           name: 'variable rain and snow',
           svg: partlyRainingAndSnowingMoon,
           desk: 'Переменный дождь и снег',
-          background: 'linear-gradient(179.1deg, #add2f5 -1.9%, #D5F3FF 44.9%, #ffe971 96.1%)'
+          background: 'linear-gradient(179.1deg, #add2f5 -1.9%, #D5F3FF 44.9%, rgb(178, 188, 197) 96.1%)'
         },
         {
           name: 'variable rain',
           svg: partlyRainingMoon,
           desk: 'Переменный дождь',
-          background: 'linear-gradient(179.1deg, rgb(254, 213, 102) -1.9%, rgb(200 223 244) 44.9%, rgb(234, 247, 252) 96.1%)'
+          background: 'linear-gradient(179.1deg, rgb(178, 188, 197) -1.9%, rgb(200 223 244) 44.9%, rgb(234, 247, 252) 96.1%)'
         },
         {
           name: 'variable snow',
           svg: partlySnowingMoon,
           desk: 'Переменный снег',
-          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #f3ece3 96.1%)'
+          background: 'linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, rgb(178, 188, 197) 96.1%)'
         },
         {
           name: 'drizzling rain',
@@ -412,13 +412,13 @@ export default {
           name: 'moon and storm',
           svg: moonStorm,
           desk: 'Гроза и луна',
-          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #dedbd1 96.1%)'
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #b6b6b6 96.1%)'
         },
         {
           name: 'snow and storm',
           svg: snowStorm,
           desk: 'Гроза и снег',
-          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
+          background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #bcbcbc 96.1%)'
         },
         {
           name: 'moon, snow and storm',
