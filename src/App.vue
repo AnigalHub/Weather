@@ -1,6 +1,6 @@
 <template>
   <div id="app" :style="{background:Weather.current.background}">
-    <b-container v-if="!loading">
+    <b-container v-if="!loading && show">
       <div class="city">
         <span>Choose one of the options: </span>
         <select v-model="selected" @click="recalculateTheWeather()">
@@ -128,12 +128,20 @@
           </b-col>
         </b-row>
     </b-container>
+    <b-container v-else class="container_error">
+      <div class="error">
+        <component :is="svgError"/>
+        <h1>Error</h1>
+        <h2>An error has occurred. We apologize. We will fix it as soon as possible and are sincerely sorry for any inconvenience caused.</h2>
+      </div>
+    </b-container>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
 
+  import error from "./components/icons/error";
   import sunny from "./components/icons/sunny";
   import moon from "./components/icons/moon";
   import partlyCloudy from "@/components/icons/partlyCloudy";
@@ -166,7 +174,9 @@ export default {
   components: {WeatherChart},
   data(){
     return{
+      svgError: error,
       loading: true,
+      show: true,
       selected: 'Moscow',
       options: [
         { text: 'Moscow'},
@@ -463,10 +473,10 @@ export default {
   },
   methods:{
     async recalculateTheWeather(){
-      // TODO:
-      // Обработка ОШИБОК, потому что АПИ может не всегда работать и выдавать результат
-      // Может упасть сервис, может не пройти токен авторизации, может не быть интернета
       let response  = await this.getWeather();
+      if(response.status !== 200){
+          this.show = false;
+      }
       this.loading = false;
       this.getCurrentData(response.data);
       this.getWeekData(response.data);
@@ -483,7 +493,6 @@ export default {
           days
         }
       });
-      console.log('response', { response })
       return response;
     },
     getDayMs(i){
@@ -677,12 +686,28 @@ export default {
   #app {
     background: linear-gradient(179.1deg, #85BCF1 -1.9%, #D5F3FF 44.9%, #eaf7fc 96.1%);
     min-height: 100vh;
-    text-align: center;
     padding: 0;
     font-family: 'Roboto Condensed', sans-serif;
   }
   .container{
     padding: 0 !important;
+  }
+  .container_error{
+    padding: 25% 0 0 !important;
+  }
+  .error{
+    background: rgba(255, 255, 255, 0.66);
+    border-radius: 10px;
+    color: black;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+    padding: 12px 12px 6px;
+    h1{
+      color: #db4b32;
+      margin-left: 55px;
+    }
+    h1,h2{
+      text-align: left;
+    }
   }
   canvas{
     background: rgba(255, 255, 255, 0.66);
