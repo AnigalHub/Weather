@@ -118,7 +118,7 @@
                 </div>
               </b-col>
             </b-row>
-            <h4>Hourly forecast</h4>
+            <h4 class="additionally_h">Hourly forecast</h4>
             <div class="flex-container">
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
@@ -984,7 +984,7 @@ export default {
       margin: 0 !important;
     }
     .addRow{
-      padding: 0 15px;
+      padding: 0 5px;
     }
     .mainRow, .addRow, .darkLight{
       flex-direction: column;
@@ -1014,15 +1014,19 @@ export default {
     }
     .col .flex-container > .Line {
       width: 99%;
-      padding: 0 15px 7px 20px;
+      padding: 0 10px 7px;
       margin: 0;
     }
     .light {
       font-size: 1.2rem;
       margin-top: -4%;
+      margin-left: 35%;
+    }
+    .additionally_h{
+      padding-left: 5px;
     }
     .day h2 {
-      font-size: .9rem !important;
+      font-size: .85rem !important;
     }
     .sunMoonSvg, .svgDayOfTheWeek {
       margin: 5% auto 0 auto;
