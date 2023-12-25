@@ -7,6 +7,22 @@
                   :options="chartOptions"
                   :data="localData"
         />
+        <DoughnutChart ref="chart" v-else-if="showChart && type === 'Doughnut' && localData"
+                  :options="chartOptions"
+                  :data="localData"
+        />
+        <BubbleChart ref="chart" v-else-if="showChart && type === 'Bubble' && localData"
+                :options="chartOptions"
+                :data="localData"
+        />
+        <PieChart ref="chart" v-else-if="showChart && type === 'Pie' && localData"
+                  :options="chartOptions"
+                  :data="localData"
+        />
+        <ScatterChart ref="chart" v-else-if="showChart && type === 'Scatter' && localData"
+                 :options="chartOptions"
+                 :data="localData"
+        />
 </template>
 
 <script>
@@ -16,18 +32,20 @@
         LinearScale,
         PointElement,
         LineElement,
+        ArcElement,
         BarElement,
         Title,
         Tooltip,
         Legend,
     } from 'chart.js'
-    import { Line, Bar } from 'vue-chartjs'
+    import { Line, Bar, Doughnut, Bubble, Pie, Scatter } from 'vue-chartjs'
 
     ChartJS.register(
         CategoryScale,
         LinearScale,
         PointElement,
         LineElement,
+        ArcElement,
         BarElement,
         Title,
         Tooltip,
@@ -36,7 +54,7 @@
 
     export default {
         name: "WeatherChart",
-        components: { LineChart: Line, BarChart: Bar},
+        components: { LineChart: Line, BarChart: Bar, DoughnutChart:Doughnut, BubbleChart:Bubble, PieChart: Pie, ScatterChart:Scatter },
         props: {
             chartData: {
                 type: Object,
@@ -57,12 +75,10 @@
         watch: {
             chartData:{
                 immediate: true,
-                handler(newVal, oldVal){
-                    console.log("watcher", {newVal, oldVal})
+                handler(newVal){
                     this.localData = newVal;
                 },
             },
-
         },
         created() {
             setTimeout(() => this.showChart = true, 100)
