@@ -1,12 +1,10 @@
 <template>
   <div id="app" :style="{background:Weather.current.background}">
-    <b-container v-if="!loading && show">
+    <b-container v-if="loading">
       <div class="city">
         <span>Choose one of the options: </span>
         <select v-model="selected" @click="recalculateTheWeather()">
-        <option v-for="option in options" v-bind:value="option.text">
-          {{ option.text }}
-        </option>
+        <option v-for="option in options" v-bind:value="option">{{ option }}</option>
       </select>
       </div>
       <b-row class="mainRow">
@@ -118,7 +116,7 @@
                 </div>
               </b-col>
             </b-row>
-            <h4 class="additionally_h">Hourly forecast</h4>
+            <h4>Hourly forecast</h4>
             <div class="flex-container">
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
               <div class="Line"><WeatherChart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
@@ -176,15 +174,8 @@ export default {
     return{
       svgError: error,
       loading: true,
-      show: true,
       selected: 'Moscow',
-      options: [
-        { text: 'Moscow'},
-        { text: 'Kolomna' },
-        { text: 'Ryazan'},
-        { text: 'Ryazhsk'},
-        { text: 'Vladimir'},
-      ],
+      options: [ 'Moscow', 'Kolomna' , 'Ryazan', 'Ryazhsk', 'Vladimir'],
       tempDay: {
         labels: [],
         datasets: [
@@ -213,7 +204,7 @@ export default {
       },
       chartOptions: {
         responsive: true,
-        plugins: {legend: {labels: {font: {size: 14}}}}
+        plugins: { legend: {labels: { font: { size: 14 } } } }
       },
       Weather:{
         city:'',
@@ -228,8 +219,8 @@ export default {
         },
         days:[]
       },
-      date:new Date(),
-      SvgsDay:[
+      date: new Date(),
+      SvgsDay: [
         {
           name:'sunny',
           svg: sunny,
@@ -339,7 +330,7 @@ export default {
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
       ],
-      SvgsNight:[
+      SvgsNight: [
         {
           name: 'moon',
           svg: moon,
@@ -449,7 +440,7 @@ export default {
           background: 'linear-gradient(179.1deg, #7096b7 -1.9%, #c5e8fc 44.9%, #eaf7fc 96.1%)'
         },
       ],
-      IncomingPictures:[
+      IncomingPictures: [
         {codes:[1000]},
         {codes:[1003]},
         {codes:[1069,1252]},
@@ -475,9 +466,8 @@ export default {
     async recalculateTheWeather(){
       let response  = await this.getWeather();
       if(response.status !== 200){
-          this.show = false;
+        this.loading = false;
       }
-      this.loading = false;
       this.getCurrentData(response.data);
       this.getWeekData(response.data);
     },
@@ -659,6 +649,7 @@ export default {
   }
   h4{
     font-size: 1.2rem !important;
+    text-align: center;
   }
   .day_name{
     text-align: left;
@@ -693,7 +684,7 @@ export default {
     padding: 0 !important;
   }
   .container_error{
-    padding: 25% 0 0 !important;
+    padding: 18% 0 0 !important;
   }
   .error{
     background: rgba(255, 255, 255, 0.66);
@@ -762,11 +753,9 @@ export default {
     margin-top: -8%;
     margin-bottom: 0;
   }
-  select{
+  select, select:focus{
     background: transparent !important;
     border: none !important;
-  }
-  select:focus {
     outline: none;
   }
   option{
@@ -836,10 +825,6 @@ export default {
   .flex-container > .day{
     width: 15.16%;
     height: 125px;
-    margin: 0 0.75% 1%;
-  }
-  .flex-container > .dd{
-    width: 15.16%;
     margin: 0 0.75% 1%;
   }
   .flex-container, .hours{
@@ -1021,9 +1006,6 @@ export default {
       font-size: 1.2rem;
       margin-top: -4%;
       margin-left: 35%;
-    }
-    .additionally_h{
-      padding-left: 5px;
     }
     .day h2 {
       font-size: .85rem !important;
