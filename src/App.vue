@@ -13,7 +13,7 @@
         <b-col cols="3">
           <div>
             <h4>Today:</h4>
-            <div class="today line">
+            <div class="today">
               <b-row>
                 <b-col cols="5">
                   <component :is="Weather.current.svg" class="mainSvg" />
@@ -22,14 +22,12 @@
                     <b>{{ Weather.current.name }}</b>
                   </p>
                 </b-col>
-                <b-col class="today_time">
-                  <p>
-                    <b>{{ date.toLocaleString('en-US', { weekday: 'long' }) }}</b>
-                  </p>
-                  <hr />
+                <b-col class="today_inf">
+                  <p><b>{{ date.toLocaleString('en-US', { weekday: 'long' }) }}</b></p>
+                  <hr/>
                   <p>{{ date.toLocaleDateString() }}</p>
                   <p>{{ date.toLocaleTimeString().slice(0, -3) }}</p>
-                  <hr />
+                  <hr/>
                   <p>Feels like: {{ Math.round(Weather.current.feel) }}°</p>
                 </b-col>
               </b-row>
@@ -102,7 +100,7 @@
                         <h2>{{ getDayOfTheWeek(index + 1) }}</h2>
                       </b-col>
                       <b-col>
-                        <div class="today_time">{{ day.number }}</div>
+                        <div class="today_inf">{{ day.number }}</div>
                       </b-col>
                     </b-row>
                     <hr/>
@@ -111,7 +109,7 @@
                         <component :is="day.svg" :key="index" width="100%" class="svgDayOfTheWeek"/>
                       </b-col>
                       <b-col>
-                        <p class="light">
+                        <p class="darkLight_temp">
                           {{ Math.round(day.minTemp) }}°
                           {{ Math.round(day.maxTemp) }}°
                         </p>
@@ -125,10 +123,10 @@
           </b-row>
           <h4>Hourly forecast</h4>
           <div class="flex-container">
-            <div class="Line"><weather-chart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
-            <div class="Line"><weather-chart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
-            <div class="Line"><weather-chart :chartOptions="chartOptions" :chartData="cloudDay" type="Line"/></div>
-            <div class="Line"><weather-chart :chartOptions="chartOptions" :chartData="humidityDay" type="Line"/></div>
+            <div class="chart"><weather-chart :chartOptions="chartOptions" :chartData="tempDay" type="Line"/></div>
+            <div class="chart"><weather-chart :chartOptions="chartOptions" :chartData="rainSnowDay" type="Line"/></div>
+            <div class="chart"><weather-chart :chartOptions="chartOptions" :chartData="cloudDay" type="Line"/></div>
+            <div class="chart"><weather-chart :chartOptions="chartOptions" :chartData="humidityDay" type="Line"/></div>
           </div>
         </b-col>
       </b-row>
@@ -504,20 +502,25 @@
       },
       /** Получение погоды */
       async getWeather() {
-        const API_KEY = 'b77f6d044b784ff99b1160139232111';
-        const q = this.selected;
-        const days = '3';
-        const response = await axios.get(
-                `http://api.weatherapi.com/v1/forecast.json`,
-                {
-                  params: {
-                    key: API_KEY,
-                    q,
-                    days,
+        try{
+          const API_KEY = 'b77f6d044b784ff99b1160139232111';
+          const q = this.selected;
+          const days = '3';
+          const response = await axios.get(
+                  `http://api.weatherapi.com/v1/forecast.json`,
+                  {
+                    params: {
+                      key: API_KEY,
+                      q,
+                      days,
+                    },
                   },
-                },
-        );
-        return response;
+          );
+          return response;
+        }
+        catch (error) {
+          console.log('Error:', error)
+        }
       },
       /** Подсчет миллисекунд дня */
       getDayMs(i) {
@@ -701,15 +704,15 @@
         const { forecast } = data;
         this.Weather.days = [];
         const forecastdays = forecast.forecastday;
-        for (let jj = 1; jj < forecastdays.length; jj++) {
-          const { code } = forecastdays[jj].day.condition;
+        for (let i = 1; i < forecastdays.length; i++) {
+          const { code } = forecastdays[i].day.condition;
           const [putSvg, putName] = this.putInSvg(0, code);
           const day = {
-            maxTemp: forecastdays[jj].day.maxtemp_c,
-            minTemp: forecastdays[jj].day.mintemp_c,
+            maxTemp: forecastdays[i].day.maxtemp_c,
+            minTemp: forecastdays[i].day.mintemp_c,
             svg: putSvg,
             name: putName,
-            number: new Date(this.getDayMs(jj)).toLocaleDateString(),
+            number: new Date(this.getDayMs(i)).toLocaleDateString(),
           };
           this.Weather.days.push(day);
         }
@@ -719,61 +722,39 @@
 </script>
 
 <style lang="scss">
-  .mainSvg {
-    width: 120%;
-    margin-top: -10%;
-    margin-left: -10%;
+  /*вся страница*/
+  #app {
+    background: linear-gradient(179.1deg, #85bcf1 -1.9%, #d5f3ff 44.9%, #eaf7fc 96.1%);
+    min-height: 100vh;
+    padding: 0;
+    font-family: 'Roboto Condensed', sans-serif;
+  }
+  /*контейнер*/
+  .container {
+    padding: 0 !important;
+  }
+  /*заголовки*/
+  h2 {
+    text-align: left;
+    color: black;
+    font-weight: 500 !important;
   }
   h4 {
     font-size: 1.2rem !important;
     text-align: center;
   }
-  .day_name {
-    text-align: left;
-    margin-bottom: 0 !important;
-  }
-  .sunMoonSvg {
-    width: 255%;
-    margin: 30% auto 0 -45%;
-    display: block;
-  }
-  .svgDayOfTheWeek {
-    width: 185%;
-    margin: 30% auto 0 -15%;
-    display: block;
-  }
-  .twentyFourHoursSvg {
-    width: 125%;
-    margin: -20% auto 0 -10%;
-  }
-  .twentyFourHoursTemp {
-    font-size: 1.6rem;
-    text-align: center;
-    margin-top: -10%;
-  }
-  #app {
-    background: linear-gradient(
-                    179.1deg,
-                    #85bcf1 -1.9%,
-                    #d5f3ff 44.9%,
-                    #eaf7fc 96.1%
-    );
-    min-height: 100vh;
-    padding: 0;
-    font-family: 'Roboto Condensed', sans-serif;
-  }
-  .container {
-    padding: 0 !important;
-  }
+  /*контейнер при ошибки*/
   .container_error {
     padding: 18% 0 0 !important;
   }
+  /*блок под текст ошибки*/
   .error {
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
     color: black;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
     padding: 12px 12px 6px;
+    /*заголовки*/
     h1 {
       color: #db4b32;
       margin-left: 55px;
@@ -783,6 +764,41 @@
       text-align: left;
     }
   }
+  /*svg текущей погоды (сегодня)*/
+  .mainSvg {
+    width: 120%;
+    margin-top: -10%;
+    margin-left: -10%;
+  }
+  /*название дня или ночи*/
+  .day_name {
+    text-align: left;
+    margin-bottom: 0 !important;
+  }
+  /*svg дня или ночи*/
+  .sunMoonSvg {
+    width: 255%;
+    margin: 30% auto 0 -45%;
+    display: block;
+  }
+  /*svg следующих дней (день недели)*/
+  .svgDayOfTheWeek {
+    width: 185%;
+    margin: 30% auto 0 -15%;
+    display: block;
+  }
+  /*svg утро/день/вечер*/
+  .twentyFourHoursSvg {
+    width: 125%;
+    margin: -20% auto 0 -10%;
+  }
+  /*температура утро/день/вечер*/
+  .twentyFourHoursTemp {
+    font-size: 1.6rem;
+    text-align: center;
+    margin-top: -10%;
+  }
+  /*блок графиков*/
   canvas {
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
@@ -791,15 +807,18 @@
     padding: 12px 12px 6px;
     margin: 0 0 2% 0;
   }
+  /*блок под кратк. инф о сегодняшней погоде*/
   .today {
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
     text-align: left;
+    height: 125px;
     color: black;
     padding: 15px;
     margin-bottom: 7px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   }
+  /*блок под пол. инф о сегодняшней погоде, блок под погоду утром/днем/вечером*/
   .feels,
   .hours {
     text-align: left;
@@ -809,23 +828,21 @@
     padding: 15px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   }
-  .today_time p,
-  .today_time {
+  /*кратк. инф о сегодняшней погоде*/
+  .today_inf p,
+  .today_inf {
     color: black;
     text-align: left;
     margin-bottom: 0;
   }
+  /*разделительная горизонтальная линия*/
   hr {
-    margin-top: 0rem !important;
-    margin-bottom: 0rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
     background: transparent;
     box-shadow: 0 0.5px 0.5px rgba(0, 0, 0, 0.25);
   }
-  h2 {
-    text-align: left;
-    color: black;
-    font-weight: 500 !important;
-  }
+
   .now {
     font-size: 2.5rem;
     color: black;
@@ -838,15 +855,18 @@
     margin-top: -8%;
     margin-bottom: 0;
   }
+  /*элемент выбора города*/
   select,
   select:focus {
     background: transparent !important;
     border: none !important;
     outline: none;
   }
+  /*пункты элемента выбора города*/
   option {
     background-color: rgba(255, 255, 255, 0.66) !important;
   }
+  /*блок под выбор города*/
   .city {
     font-size: 1.5rem;
     line-height: 2rem;
@@ -860,61 +880,72 @@
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
     padding: 6px 12px 6px;
   }
-  .line {
-    height: 125px;
-  }
+  /*блок под значения*/
   .conditions {
     font-size: 0.85rem !important;
     line-height: 1rem;
     text-align: center;
     margin-bottom: 0 !important;
   }
-  .light {
-    margin-top: 15%;
-    font-size: 1.5rem;
-    margin-bottom: 0 !important;
-  }
+  /*блок под важные значения*/
   .sunMoon {
     margin-top: 25%;
   }
+  /*температура у ближайших дней*/
+  .darkLight_temp {
+    margin-top: 15%;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 0 !important;
+  }
+  /*блоки под ближайшие дни*/
   .day {
     background: rgba(255, 255, 255, 0.66);
     border-radius: 10px;
     color: black;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
     padding: 12px 12px 6px;
+    /*заголовок*/
     h2 {
       font-size: 1rem !important;
       font-weight: 500;
       margin-bottom: 0 !important;
     }
-    .today_time p,
-    .today_time {
+    /*кратк. инф о сегодняшней погоде*/
+    .today_inf p,
+    .today_inf {
       font-size: 0.9rem;
     }
   }
+  /*параметры сетки бутстрап*/
   .col-3 {
     padding: 0 !important;
   }
+  /*параметры сетки бутстрап*/
   .col,
   .col-3 {
+    /*блоки под ближайшие дни*/
     .flex-container > .day {
       width: 47%;
       margin: 0 1% 7px;
     }
   }
+  /*параметры сетки бутстрап*/
   .col {
     padding: 0 3%;
-    .flex-container > .Line {
+    /*блоки под диаграммы (графики)*/
+    .flex-container > .chart {
       width: 47.8%;
       margin: 0 8px 7px;
     }
   }
+  /*блоки под ближайшие дни*/
   .flex-container > .day {
     width: 15.16%;
     height: 125px;
     margin: 0 0.75% 1%;
   }
+  /*контейнер, который включает в себя повтор блоков, блок под погоду утром/днем/вечером*/
   .flex-container,
   .hours {
     display: flex;
@@ -924,6 +955,7 @@
     width: 100%;
     margin: 0;
   }
+  /*блоки под погоду утром/днем/вечером*/
   .hours > div {
     width: 31%;
     margin: 0 1%;
@@ -936,80 +968,101 @@
   }
 
   @media screen and (min-width: 992px) and (max-width: 1200px) {
+    /*блок под выбор города*/
     .city {
       width: 40%;
       font-size: 1.2rem;
     }
-    .col .flex-container > .Line {
+    /*блоки под диаграммы (графики)*/
+    .col .flex-container > .chart {
       width: 47.5%;
     }
-    .light {
+    /*температура у ближайших дней*/
+    .darkLight_temp {
       font-size: 1.2rem;
       margin-top: 25%;
     }
+    /*заголовок у блока под ближайшие дни*/
     .day h2 {
       font-size: 0.9rem !important;
     }
+    /*svg следующих дней (день недели)*/
     .svgDayOfTheWeek {
       margin: 50% auto 0 -15%;
     }
+    /*svg дня или ночи*/
     .sunMoonSvg {
       margin: 70% auto 0 -45%;
     }
   }
   @media screen and (min-width: 768px) and (max-width: 992px) {
+    /*блок под выбор города*/
     .city {
       width: 55%;
       font-size: 1.2rem;
     }
+    /*бутстрап сетка*/
     .mainRow {
       flex-direction: column;
+      /*параметры сетки бутстрап*/
       .col-3 {
         display: flex;
         max-width: 100%;
         padding: 0 15px !important;
+        /*блоки*/
         & > div {
           width: 32%;
           margin: 0 0.75% 1%;
         }
       }
     }
-    .col .flex-container > .Line {
+    /*блоки под диаграммы (графики)*/
+    .col .flex-container > .chart {
       width: 47.4%;
     }
-    .light {
+    /*температура у ближайших дней*/
+    .darkLight_temp {
       font-size: 1.2rem;
       margin-top: 25%;
     }
+    /*заголовок у блока под ближайшие дни*/
     .day h2 {
       font-size: 0.9rem !important;
     }
+    /*svg следующих дней (день недели)*/
     .svgDayOfTheWeek {
       margin: 50% auto 0 -15%;
     }
+    /*svg дня или ночи*/
     .sunMoonSvg {
       margin: 70% auto 0 -45%;
     }
   }
   @media screen and (min-width: 500px) and (max-width: 768px) {
+    /*блок под выбор города*/
     .city {
       width: 93%;
       font-size: 1.2rem;
     }
+    /*бутстрап сетка*/
     .row {
       margin: 0 !important;
     }
+    /*бутстрап сетка*/
     .mainRow,
     .addRow {
       flex-direction: column;
+      /*параметры сетки бутстрап*/
       .col {
         padding: 0 5px !important;
       }
+      /*параметры сетки бутстрап*/
       .col-3 {
         max-width: 100%;
         padding: 0 15px !important;
       }
     }
+    /*svg текущей погоды (сегодня)*/
     .mainSvg {
       width: 60%;
       float: left;
@@ -1019,33 +1072,41 @@
     .temp {
       margin-top: 15%;
     }
+    /*svg утро/день/вечер*/
     .twentyFourHoursSvg {
       width: 65%;
-      margin: -10% auto 5% -10%;
+      margin: -10% auto 5% 20%;
     }
+    /*блоки под ближайшие дни*/
     .col .flex-container > .day,
     .col-3 .flex-container > .day {
       width: 48%;
       margin: 0 1% 7px;
     }
-    .col .flex-container > .Line {
+    /*блоки под диаграммы (графики)*/
+    .col .flex-container > .chart {
       width: 100%;
     }
-    .light {
+    /*температура у ближайших дней*/
+    .darkLight_temp {
       font-size: 1.2rem;
       margin-top: 15%;
     }
+    /*заголовок у блоков под ближайшие дни*/
     .day h2 {
       font-size: 0.9rem !important;
     }
+    /*svg следующих дней (день недели)*/
     .svgDayOfTheWeek {
       width: 145%;
       margin: 15% auto 0 auto;
     }
+    /*svg дня или ночи*/
     .sunMoonSvg {
       margin: 25% auto 0 auto;
       width: 155%;
     }
+    /*блок под важные значения*/
     .sunMoon {
       margin-top: 20%;
     }
@@ -1055,19 +1116,24 @@
       width: 93%;
       font-size: 1.2rem;
     }
+    /*бутстрап сетка*/
     .row {
       margin: 0 !important;
     }
+    /*бутстрап сетка*/
     .addRow {
       padding: 0 5px;
     }
+    /*бутстрап сетка*/
     .mainRow,
     .addRow,
     .darkLight {
       flex-direction: column;
+      /*параметры сетки бутстрап*/
       .col {
         padding: 0 5px !important;
       }
+      /*параметры сетки бутстрап*/
       .col-3,
       .col-4,
       .col-5 {
@@ -1075,6 +1141,7 @@
         padding: 0 15px !important;
       }
     }
+    /*svg текущей погоды (сегодня)*/
     .mainSvg {
       width: 80%;
       display: block;
@@ -1083,35 +1150,45 @@
     .temp {
       margin-top: 0;
     }
+    /*svg утро/день/вечер*/
     .twentyFourHoursSvg {
       width: 65%;
       margin: -10% auto 5% 20%;
     }
+    /*блоки под ближайшие дни*/
     .col .flex-container > .day,
     .col-3 .flex-container > .day {
       width: 48%;
       margin: 0 1% 7px;
     }
-    .col .flex-container > .Line {
+    /*блоки под диаграммы (графики)*/
+    .col .flex-container > .chart {
       width: 99%;
       padding: 0 10px 7px;
       margin: 0;
     }
-    .light {
+    /*температура у ближайших дней*/
+    .darkLight_temp {
       font-size: 1.2rem;
       margin-top: -4%;
-      margin-left: 35%;
     }
+    /*заголовок у блоков под ближайшие дни*/
     .day h2 {
       font-size: 0.85rem !important;
     }
+    /*svg дня или ночи, svg следующих дней (день недели)*/
     .sunMoonSvg,
     .svgDayOfTheWeek {
-      margin: 5% auto 0 auto;
+      margin: 0 auto 0 auto;
       width: 65%;
     }
+    /*блок под важные значения*/
     .sunMoon {
       margin-top: 0;
+    }
+    /*блок под значения*/
+    .conditions {
+      margin-top: -2%;
     }
   }
 </style>
