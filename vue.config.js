@@ -1,4 +1,13 @@
-const { defineConfig } = require('@vue/cli-service')
-module.exports = defineConfig({
-  transpileDependencies: true
-})
+const envMode = process.env.NODE_ENV;
+
+
+let publicPath = '/weather/'
+
+if(envMode === 'production')
+  publicPath = ''
+console.log('Before building', {envMode, publicPath})
+return -1
+
+module.exports = {
+  publicPath,
+}
